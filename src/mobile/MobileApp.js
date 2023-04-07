@@ -162,7 +162,7 @@ function MobileApp() {
 
   async function getArtistData() {
     return await fetchWebApi(
-      `v1/search?query=${searchKey}&type=artist&locale=en-US%2Cen%3Bq%3D0.9&limit=10`,
+      `v1/search?query=${searchKey}&type=artist&locale=en-US%2Cen%3Bq%3D0.9&limit=5`,
       "GET"
     );
   }
@@ -226,7 +226,7 @@ function MobileApp() {
     let tempArtistTracksLC = tempData.map((str) => str.toLowerCase());
     setArtistTopTracksLC(tempArtistTracksLC);
     setGameTitle(artist.name + "'s Top Tracks");
-    document.getElementById("artistSearch").style.display = "none";
+    document.getElementById("artistSearchMobile").style.display = "none";
     displayGameBoard();
   }
 
@@ -283,6 +283,7 @@ function MobileApp() {
 
   function assignNonMusic(option) {
     let tempData = [];
+    let answerData = [];
     switch (option) {
       case "Dog Breeds":
         tempData = [
@@ -344,14 +345,53 @@ function MobileApp() {
           "Regular Show",
         ];
         break;
+      case "Nickelodeon Shows":
+        tempData = [
+          "Avatar: The Last Airbender",
+          "SpongeBob SquarePants",
+          "The Fairly OddParents",
+          "iCarly",
+          "Danny Phantom",
+          "Ned's Declassified",
+          "VICTORiOUS",
+          "Jimmy Neutron",
+        ];
+        break;
+      case "Top Scorers 22/23":
+        tempData = [
+          "Erling Haaland",
+          "Harry Kane",
+          "Victor Osimhen",
+          "Kylian Mbappe",
+          "Ivan Toney",
+          "Robert Lewandowski",
+          "Marcus Rashford",
+          "Lautaro Martinez",
+        ];
+        answerData = [
+          "haaland",
+          "kane",
+          "osimhen",
+          "mbappe",
+          "toney",
+          "lewandowski",
+          "rashford",
+          "lautaro",
+        ];
+        break;
       default:
         break;
     }
     console.log(tempData);
-    setNonMusicData(tempData.map((data) => data.toLowerCase()));
+    console.log(answerData);
+    if (answerData.length > 0) {
+      setNonMusicData(answerData);
+    } else {
+      setNonMusicData(tempData.map((data) => data.toLowerCase()));
+    }
     setAnswers(
       tempData.map((data) => {
-        if (data.length > 17) return data.slice(0, 17) + "...";
+        if (data.length > 19) return data.slice(0, 17) + "...";
         else return data;
       })
     );
@@ -495,7 +535,7 @@ function MobileApp() {
           }, 1500);
         } else if (xs.length === 1) {
           let tempX = xs;
-          tempX += " X";
+          tempX += "X";
           setXs(tempX);
           if (!mute) playWrong();
           document.getElementById("xsMobile").style.display = "block";
@@ -506,9 +546,9 @@ function MobileApp() {
             document.getElementById("guessInputMobile").focus();
             document.getElementById("guessInputMobile").select();
           }, 1500);
-        } else if (xs.length === 3) {
+        } else if (xs.length === 2) {
           let tempX = xs;
-          tempX += " X";
+          tempX += "X";
           setXs(tempX);
           if (!mute) playWrong();
           document.getElementById("xsMobile").style.display = "block";
@@ -681,15 +721,16 @@ function MobileApp() {
               </button>
               <button
                 onClick={() => {
-                  document.getElementById("gameOptions").style.display = "none";
-                  document.getElementById("artistSearch").style.display =
+                  document.getElementById("gameOptionsMobile").style.display =
+                    "none";
+                  document.getElementById("artistSearchMobile").style.display =
                     "block";
                   document
-                    .getElementById("searchInput")
+                    .getElementById("searchInputMobile")
                     .addEventListener("keypress", function (event) {
                       if (event.key === "Enter") {
                         event.preventDefault();
-                        document.getElementById("searchButton").click();
+                        document.getElementById("searchButtonMobile").click();
                       }
                     });
                   setGameOption("Artists Top Tracks");
@@ -699,15 +740,16 @@ function MobileApp() {
               </button>
               <button
                 onClick={() => {
-                  document.getElementById("gameOptions").style.display = "none";
-                  document.getElementById("artistSearch").style.display =
+                  document.getElementById("gameOptionsMobile").style.display =
+                    "none";
+                  document.getElementById("artistSearchMobile").style.display =
                     "block";
                   document
-                    .getElementById("searchInput")
+                    .getElementById("searchInputMobile")
                     .addEventListener("keypress", function (event) {
                       if (event.key === "Enter") {
                         event.preventDefault();
-                        document.getElementById("searchButton").click();
+                        document.getElementById("searchButtonMobile").click();
                       }
                     });
                   setGameOption("Related");
@@ -718,7 +760,7 @@ function MobileApp() {
             </div>
             <div
               className="artistSearchMobile"
-              id="artistSearch"
+              id="artistSearchMobile"
               style={{display: "none"}}
             >
               <input
@@ -728,12 +770,13 @@ function MobileApp() {
                 }}
                 style={{marginTop: "30px"}}
                 type="text"
-                id="searchInput"
+                className="searchInputMobile"
+                id="searchInputMobile"
                 value={searchKey}
               ></input>
               <button
-                id="searchButton"
-                className="guessButton"
+                id="searchButtonMobile"
+                className="guessButtonMobile"
                 onClick={logArtistData}
               >
                 Search
@@ -742,81 +785,38 @@ function MobileApp() {
                 {artistData.map((artist, index) => {
                   return (
                     <>
-                      {index % 2 === 0 ? (
-                        <div>
-                          <a
-                            class="active"
-                            style={{cursor: "pointer"}}
-                            onClick={() => {
-                              setSelectedArtist(artist.name);
-                              if (gameOption === "Artists Top Tracks")
-                                logArtistTopTracks(artist);
-                              if (gameOption === "Related") logRelated(artist);
-                            }}
-                          >
-                            <div
-                              className="artistBlock"
-                              style={{display: "inline-block"}}
-                            >
-                              {artist.images.length > 0 ? (
-                                <div className="artistImgWrapper">
-                                  <img
-                                    style={{display: "inline-block"}}
-                                    alt=""
-                                    src={artist.images[0].url}
-                                  />
-                                </div>
-                              ) : (
-                                ""
-                              )}
-                              <h4 style={{display: "inline-block"}}>
-                                {artist.name.length > 15
-                                  ? artist.name.slice(0, 15) + "..."
-                                  : artist.name}
-                              </h4>
+                      <a
+                        class="active"
+                        style={{cursor: "pointer"}}
+                        onClick={() => {
+                          setSelectedArtist(artist.name);
+                          if (gameOption === "Artists Top Tracks")
+                            logArtistTopTracks(artist);
+                          if (gameOption === "Related") logRelated(artist);
+                        }}
+                      >
+                        <div
+                          className="artistBlockMobile"
+                          style={{display: "inline-block"}}
+                        >
+                          {artist.images.length > 0 ? (
+                            <div className="artistImgWrapper">
+                              <img
+                                style={{display: "inline-block"}}
+                                alt=""
+                                src={artist.images[0].url}
+                              />
                             </div>
-                          </a>
-                          <a
-                            class="active"
-                            style={{cursor: "pointer"}}
-                            onClick={() => {
-                              setSelectedArtist(artistData[index + 1]);
-                              if (gameOption === "Artists Top Tracks")
-                                logArtistTopTracks(artistData[index + 1]);
-                              if (gameOption === "Related")
-                                logRelated(artistData[index + 1]);
-                            }}
-                          >
-                            <div
-                              className="artistBlock"
-                              style={{
-                                alignItems: "center",
-                                display: "inline-block",
-                              }}
-                            >
-                              {artistData[index + 1].images.length > 0 ? (
-                                <div className="artistImgWrapper">
-                                  <img
-                                    style={{display: "inline-block"}}
-                                    alt=""
-                                    src={artistData[index + 1].images[0].url}
-                                  />
-                                </div>
-                              ) : (
-                                ""
-                              )}
-                              <h4 style={{display: "inline-block"}}>
-                                {artistData[index + 1].name.length > 15
-                                  ? artistData[index + 1].name.slice(0, 15) +
-                                    "..."
-                                  : artistData[index + 1].name}
-                              </h4>
-                            </div>
-                          </a>
+                          ) : (
+                            ""
+                          )}
+                          <h4 style={{display: "inline-block"}}>
+                            {artist.name.length > 14
+                              ? artist.name.slice(0, 14) + "..."
+                              : artist.name}
+                          </h4>
                         </div>
-                      ) : (
-                        ""
-                      )}
+                      </a>
                     </>
                   );
                 })}
@@ -941,6 +941,7 @@ function MobileApp() {
                     setGuessText(e.target.value);
                   }}
                   type="text"
+                  className="guessInputMobile"
                   id="guessInputMobile"
                   name="guess"
                   value={guessText}

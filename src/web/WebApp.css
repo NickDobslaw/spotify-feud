@@ -200,8 +200,17 @@ header h1 {
 h2 {
   color: #FFFFF2;
 }
+.guessInput {
+  width: 400px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 5px solid #0852c3;
+  border-radius: 4px;
+  display: inline-block;
+}
 
-input[type=text] {
+.searchInput {
   width: 400px;
   padding: 12px 20px;
   margin: 8px 0;

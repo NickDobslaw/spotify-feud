@@ -243,10 +243,7 @@ function WebApp() {
 
   async function getTopTracks() {
     return (
-      await fetchWebApi(
-        "v1/me/top/tracks?time_range=medium_term&limit=8",
-        "GET"
-      )
+      await fetchWebApi("v1/me/top/tracks?time_range=long_term&limit=8", "GET")
     ).items;
   }
 
@@ -280,10 +277,7 @@ function WebApp() {
 
   async function getTopArtists() {
     return (
-      await fetchWebApi(
-        "v1/me/top/artists?time_range=medium_term&limit=8",
-        "GET"
-      )
+      await fetchWebApi("v1/me/top/artists?time_range=long_term&limit=8", "GET")
     ).items;
   }
 
@@ -363,7 +357,7 @@ function WebApp() {
           "Jimmy Neutron",
         ];
         break;
-      case "Premier League Top Scorers 22/23":
+      case "Top Scorers 22/23":
         tempData = [
           "Erling Haaland",
           "Harry Kane",
@@ -527,43 +521,42 @@ function WebApp() {
         if (tempAnswered.length === compArray.length) displayWin();
         setAnswered(tempAnswered);
       }
+    } else {
+      if (guessText.length > 0) {
+        if (xs.length === 0) {
+          setXs("X");
+          if (!mute) playWrong();
+          document.getElementById("xs").style.display = "block";
+          document.getElementById("guessInput").disabled = true;
+          setTimeout(() => {
+            document.getElementById("xs").style.display = "none";
+            document.getElementById("guessInput").disabled = false;
+            document.getElementById("guessInput").focus();
+            document.getElementById("guessInput").select();
+          }, 1500);
+        } else if (xs.length === 1) {
+          let tempX = xs;
+          tempX += " X";
+          setXs(tempX);
+          if (!mute) playWrong();
+          document.getElementById("xs").style.display = "block";
+          document.getElementById("guessInput").disabled = true;
+          setTimeout(() => {
+            document.getElementById("xs").style.display = "none";
+            document.getElementById("guessInput").disabled = false;
+            document.getElementById("guessInput").focus();
+            document.getElementById("guessInput").select();
+          }, 1500);
+        } else if (xs.length === 3) {
+          let tempX = xs;
+          tempX += " X";
+          setXs(tempX);
+          if (!mute) playWrong();
+          document.getElementById("xs").style.display = "block";
+          document.getElementById("guessInput").disabled = true;
+        }
+      }
     }
-    // } else {
-    //   if (guessText.length > 0) {
-    //     if (xs.length === 0) {
-    //       setXs("X");
-    //       if (!mute) playWrong();
-    //       document.getElementById("xs").style.display = "block";
-    //       document.getElementById("guessInput").disabled = true;
-    //       setTimeout(() => {
-    //         document.getElementById("xs").style.display = "none";
-    //         document.getElementById("guessInput").disabled = false;
-    //         document.getElementById("guessInput").focus();
-    //         document.getElementById("guessInput").select();
-    //       }, 1500);
-    //     } else if (xs.length === 1) {
-    //       let tempX = xs;
-    //       tempX += " X";
-    //       setXs(tempX);
-    //       if (!mute) playWrong();
-    //       document.getElementById("xs").style.display = "block";
-    //       document.getElementById("guessInput").disabled = true;
-    //       setTimeout(() => {
-    //         document.getElementById("xs").style.display = "none";
-    //         document.getElementById("guessInput").disabled = false;
-    //         document.getElementById("guessInput").focus();
-    //         document.getElementById("guessInput").select();
-    //       }, 1500);
-    //     } else if (xs.length === 3) {
-    //       let tempX = xs;
-    //       tempX += " X";
-    //       setXs(tempX);
-    //       if (!mute) playWrong();
-    //       document.getElementById("xs").style.display = "block";
-    //       document.getElementById("guessInput").disabled = true;
-    //     }
-    //   }
-    // }
   }
 
   function displayWin() {
@@ -791,6 +784,7 @@ function WebApp() {
                 }}
                 style={{marginTop: "30px"}}
                 type="text"
+                className="searchInput"
                 id="searchInput"
                 value={searchKey}
               ></input>

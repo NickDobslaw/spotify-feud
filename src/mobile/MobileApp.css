@@ -186,12 +186,12 @@ header h1 {
   display: none;
 }
 
-.artistBlock {
+.artistBlockMobile {
   background-color: #0852c3;
-  font-size: 35px;
+  font-size: 28px;
   color: #FFFFF2;
   margin: 4px;
-  width: 500px;
+  width: 75vw;
   height: 75px;
   border: 2px solid #FFFFF2;
   display: none;  
@@ -210,12 +210,12 @@ header h1 {
   width: 100%;
 }
 
-.artistBlock img {
+.artistBlockMobile img {
   height: 70px;
 }
 
 
-.artistBlock h4 {
+.artistBlockMobile h4 {
   margin-bottom: 11px;
   transform: translateY(-50%);
 }
@@ -224,8 +224,18 @@ h2 {
   color: #FFFFF2;
 }
 
-input[type=text] {
-  width: 400px;
+.guessInputMobile {
+  width: 45vw;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 5px solid #0852c3;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.searchInputMobile {
+  width: 60vw;
   padding: 12px 20px;
   margin: 8px 0;
   box-sizing: border-box;
