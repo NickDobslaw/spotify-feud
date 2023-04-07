@@ -998,6 +998,7 @@ function WebApp() {
                 }}
                 type="text"
                 id="guessInput"
+                className="guessInput"
                 name="guess"
                 value={guessText}
               ></input>
