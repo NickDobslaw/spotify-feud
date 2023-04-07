@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/static/css/main.01f444d5.css",
-    "main.js": "/static/js/main.8475cfcd.js",
-    "static/js/845.587bd6b5.chunk.js": "/static/js/845.587bd6b5.chunk.js",
-    "static/js/787.8e4676ea.chunk.js": "/static/js/787.8e4676ea.chunk.js",
-    "static/media/family-feud-theme.mp3": "/static/media/family-feud-theme.b2cb315f2af26e380d18.mp3",
-    "static/media/feud-round-win.mp3": "/static/media/feud-round-win.1f71e3a109998ae01393.mp3",
-    "static/media/FEUD.ttf": "/static/media/FEUD.59246a6170127375edb2.ttf",
-    "static/media/feud-strike-sound.mp3": "/static/media/feud-strike-sound.294f08bc32350f0e705b.mp3",
-    "static/media/blueLogo.png": "/static/media/blueLogo.25ed176fdaa32fa887cb.png",
-    "static/media/feud-good-answer.mp3": "/static/media/feud-good-answer.e8ebd6941087c0aba4f9.mp3",
-    "static/media/textLogo.png": "/static/media/textLogo.185546caa0e2abc37b46.png",
-    "index.html": "/index.html",
-    "main.01f444d5.css.map": "/static/css/main.01f444d5.css.map",
-    "main.8475cfcd.js.map": "/static/js/main.8475cfcd.js.map",
-    "845.587bd6b5.chunk.js.map": "/static/js/845.587bd6b5.chunk.js.map",
-    "787.8e4676ea.chunk.js.map": "/static/js/787.8e4676ea.chunk.js.map"
+    "main.css": "/spotify-feud/static/css/main.60af5e56.css",
+    "main.js": "/spotify-feud/static/js/main.934265d4.js",
+    "static/js/845.587bd6b5.chunk.js": "/spotify-feud/static/js/845.587bd6b5.chunk.js",
+    "static/js/787.8e4676ea.chunk.js": "/spotify-feud/static/js/787.8e4676ea.chunk.js",
+    "static/media/family-feud-theme.mp3": "/spotify-feud/static/media/family-feud-theme.b2cb315f2af26e380d18.mp3",
+    "static/media/feud-round-win.mp3": "/spotify-feud/static/media/feud-round-win.1f71e3a109998ae01393.mp3",
+    "static/media/FEUD.ttf": "/spotify-feud/static/media/FEUD.59246a6170127375edb2.ttf",
+    "static/media/feud-strike-sound.mp3": "/spotify-feud/static/media/feud-strike-sound.294f08bc32350f0e705b.mp3",
+    "static/media/blueLogo.png": "/spotify-feud/static/media/blueLogo.25ed176fdaa32fa887cb.png",
+    "static/media/feud-good-answer.mp3": "/spotify-feud/static/media/feud-good-answer.e8ebd6941087c0aba4f9.mp3",
+    "static/media/textLogo.png": "/spotify-feud/static/media/textLogo.185546caa0e2abc37b46.png",
+    "index.html": "/spotify-feud/index.html",
+    "main.60af5e56.css.map": "/spotify-feud/static/css/main.60af5e56.css.map",
+    "main.934265d4.js.map": "/spotify-feud/static/js/main.934265d4.js.map",
+    "845.587bd6b5.chunk.js.map": "/spotify-feud/static/js/845.587bd6b5.chunk.js.map",
+    "787.8e4676ea.chunk.js.map": "/spotify-feud/static/js/787.8e4676ea.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.01f444d5.css",
-    "static/js/main.8475cfcd.js"
+    "static/css/main.60af5e56.css",
+    "static/js/main.934265d4.js"
   ]
 }
