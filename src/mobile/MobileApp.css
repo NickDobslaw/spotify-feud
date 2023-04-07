@@ -12,9 +12,9 @@ header h1 {
   margin-bottom: 0px;
 }
 
-.textLogo {
+.textLogoMobile {
   width: 300px;
-  margin-bottom: 0px;
+  margin-bottom: 10px;
   margin-top: 40px;
 }
 
@@ -36,7 +36,7 @@ header h1 {
 
 @font-face {
   font-family: feud;
-  src: url(./fonts/FEUD.ttf);
+  src: url(../fonts/FEUD.ttf);
 }
 
 .loginButton {
@@ -64,40 +64,40 @@ header h1 {
   cursor: pointer;
 }
 
-.guessButton {
+.guessButtonMobile {
   background-color: #0852c3;
   border: none;
   margin: 0 auto;
   color: #FFFFF2;
-  padding: 15px 32px;
-  width: 140px;
+  padding: 15px 0px;
+  width: 20vw;
   text-align: center;
   text-decoration: none;
   display: block;
-  font-size: 16px;
+  font-size: 10px;
   cursor: pointer;
   margin-left: 10px;
   margin-right: 10px;
   display: inline-block;
 }
-.gameOptions {
+.gameOptionsMobile {
   margin: 0 auto;
   margin-top: 30px;
-  width: 1080px;
+  width: 90%;
 }
-.gameOptions button {
+.gameOptionsMobile button {
   background-color: #0852c3; /* Green */
   border: none;
   color: #FFFFF2;
-  padding: 80px 100px;
-  width: 500px;
-  float: left;
-  height: 225px;
-  margin: 20px 20px;
+  padding: 0px 0px;
+  width: 90%;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  height: 100px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
-  font-size: 40px;
+  display: block;
+  font-size: 25px;
   cursor: pointer;  
 }
 
@@ -120,32 +120,55 @@ header h1 {
   display: none;
 }
 
-.gameBoard {
+.gameBoardMobile {
   display: none;
   position: relative;
 }
 
-.listItem1, .listItem2, .listItem3, .listItem4, .listItem5, .listItem6, .listItem7, .listItem8 {
+.listItem1Mobile, .listItem2Mobile, .listItem3Mobile, .listItem4Mobile, .listItem5Mobile, .listItem6Mobile, .listItem7Mobile, .listItem8Mobile {
   background-color: #3e96f6;
   font-size: 35px;
   color: #FFFFF2;
-  margin: 4px;
-  width: 400px;
+  width: 48vw;
+  margin: 0.5vw;
   height: 50px;
   border: 2px solid #FFFFF2;
 }
-.correct1, .correct2, .correct3, .correct4, .correct5, .correct6, .correct7, .correct8 {
+.correct1Mobile, .correct2Mobile, .correct3Mobile, .correct4Mobile, .correct5Mobile, .correct6Mobile, .correct7Mobile, .correct8Mobile {
   background-color: #0852c3;
-  font-size: 35px;
   color: #FFFFF2;
-  margin: 4px;
-  width: 400px;
+  width: 48vw;
+  margin: 0.5vw;
   height: 50px;
   border: 2px solid #FFFFF2;
   display: none;
 }
-.oval {
-  width: 90px;
+.correct1Mobile h2 {
+  font-size: 18px;
+}
+.correct2Mobile h2 {
+  font-size: 18px;
+}
+.correct3Mobile h2 {
+  font-size: 18px;
+}
+.correct4Mobile h2 {
+  font-size: 18px;
+}
+.correct5Mobile h2 {
+  font-size: 18px;
+}
+.correct6Mobile h2 {
+  font-size: 18px;
+}
+.correct7Mobile h2 {
+  font-size: 18px;
+}
+.correct8Mobile h2 {
+  font-size: 18px;
+}
+.ovalMobile {
+  width: 20vw;
   margin: 0 auto;
   height: 48px;
   background: #0852c3;
@@ -154,7 +177,7 @@ header h1 {
   border: 1px solid white;
 }
 
-.xs {
+.xsMobile {
   position: absolute;
   font-size: 179px;
   color: red;

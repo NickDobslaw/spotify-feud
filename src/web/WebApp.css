@@ -1,0 +1,219 @@
+.App {
+  background-color: #ffa400;
+  text-align: center;
+}
+
+header h1 {
+  font-family: feud;
+}
+
+.blueLogo {
+  width: 100px;
+  margin-bottom: 0px;
+}
+
+.textLogo {
+  width: 300px;
+  margin-bottom: 0px;
+  margin-top: 40px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+@font-face {
+  font-family: feud;
+  src: url(../fonts/FEUD.ttf);
+}
+
+.loginButton {
+  background-color: #0852c3; /* Green */
+  border: none;
+  color: white;
+  margin-top: 30px;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.logoutButton {
+  background-color: rgb(152, 26, 26); /* Green */
+  border: none;
+  color: #FFFFF2;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.guessButton {
+  background-color: #0852c3;
+  border: none;
+  margin: 0 auto;
+  color: #FFFFF2;
+  padding: 15px 32px;
+  width: 140px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: 10px;
+  margin-right: 10px;
+  display: inline-block;
+}
+.gameOptions {
+  margin: 0 auto;
+  margin-top: 30px;
+  width: 1080px;
+}
+.gameOptions button {
+  background-color: #0852c3; /* Green */
+  border: none;
+  color: #FFFFF2;
+  padding: 80px 100px;
+  width: 500px;
+  float: left;
+  height: 225px;
+  margin: 20px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 40px;
+  cursor: pointer;  
+}
+
+.column1, .column2 {
+  align-items: center;
+  float: left;
+}
+
+.enterButton {
+  background-color: #0852c3; /* Green */
+  border: none;
+  color: #FFFFF2;
+  padding: 15px 32px;
+  margin-top: 30px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  display: none;
+}
+
+.gameBoard {
+  display: none;
+  position: relative;
+}
+
+.listItem1, .listItem2, .listItem3, .listItem4, .listItem5, .listItem6, .listItem7, .listItem8 {
+  background-color: #3e96f6;
+  font-size: 35px;
+  color: #FFFFF2;
+  margin: 4px;
+  width: 400px;
+  height: 50px;
+  border: 2px solid #FFFFF2;
+}
+.correct1, .correct2, .correct3, .correct4, .correct5, .correct6, .correct7, .correct8 {
+  background-color: #0852c3;
+  font-size: 35px;
+  color: #FFFFF2;
+  margin: 4px;
+  width: 400px;
+  height: 50px;
+  border: 2px solid #FFFFF2;
+  display: none;
+}
+.oval {
+  width: 90px;
+  margin: 0 auto;
+  height: 48px;
+  background: #0852c3;
+  border-radius: 50%;
+  vertical-align: auto;
+  border: 1px solid white;
+}
+
+.xs {
+  position: absolute;
+  font-size: 179px;
+  color: red;
+  height: 212px;
+  margin: 0 auto;
+  display: none;
+}
+
+.artistBlock {
+  background-color: #0852c3;
+  font-size: 35px;
+  color: #FFFFF2;
+  margin: 4px;
+  width: 500px;
+  height: 75px;
+  border: 2px solid #FFFFF2;
+  display: none;  
+}
+
+.artistImgWrapper {
+  width: 75px;
+  float: left;
+  margin-top: 2.5px;
+  display: inline-block;
+}
+
+.artistTextWrapper {
+  display: inline-block;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.artistBlock img {
+  height: 70px;
+}
+
+
+.artistBlock h4 {
+  margin-bottom: 11px;
+  transform: translateY(-50%);
+}
+
+h2 {
+  color: #FFFFF2;
+}
+
+input[type=text] {
+  width: 400px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 5px solid #0852c3;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.volumeIcon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 25px;
+}
