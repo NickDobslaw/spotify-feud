@@ -16,6 +16,7 @@ function WebApp() {
   const clientId = "8c307a26103a46938a902a46e8ac59a8";
   const clientSecret = "eaf9ea34a9d941f39c4f825442b4b821";
   const redirectUri = "https://NickDobslaw.github.io/spotify-feud";
+  //const redirectUri = "http://localhost:3000";
 
   const [playRight] = useSound(rightSound, {volume: 0.25});
   const [playWrong] = useSound(wrongSound, {volume: 0.5});
@@ -454,7 +455,7 @@ function WebApp() {
       case "Pixar Films":
       case "Cartoon Network Shows":
       case "Nickelodeon Shows":
-      case "Premier League Top Scorers 22/23":
+      case "Top Scorers 22/23":
         compArray = [...nonMusicData];
         break;
       default:
@@ -502,27 +503,28 @@ function WebApp() {
       case "Pixar Films":
       case "Cartoon Network Shows":
       case "Nickelodeon Shows":
-      case "Premier League Top Scorers 22/23":
+      case "Top Scorers 22/23":
         compArray = [...nonMusicData];
         break;
       default:
         break;
     }
     console.log(compArray);
-    if (!answered.includes(guessText.toLowerCase())) setGuessText("");
-    if (compArray.includes(guessText.toLowerCase())) {
-      if (!answered.includes(guessText.toLowerCase())) {
+    let guessTrimmed = guessText.trim().replace(/[\u2018\u2019]/g, "'");
+    if (!answered.includes(guessTrimmed.toLowerCase())) setGuessText("");
+    if (compArray.includes(guessTrimmed.toLowerCase())) {
+      if (!answered.includes(guessTrimmed.toLowerCase())) {
         if (!mute) playRight();
-        let index = compArray.indexOf(guessText.toLowerCase());
+        let index = compArray.indexOf(guessTrimmed.toLowerCase());
         document.getElementById(`listItem${index + 1}`).style.display = "none";
         document.getElementById(`correct${index + 1}`).style.display = "block";
         let tempAnswered = [...answered];
-        tempAnswered.push(guessText.toLowerCase());
+        tempAnswered.push(guessTrimmed.toLowerCase());
         if (tempAnswered.length === compArray.length) displayWin();
         setAnswered(tempAnswered);
       }
     } else {
-      if (guessText.length > 0) {
+      if (guessTrimmed.length > 0) {
         if (xs.length === 0) {
           setXs("X");
           if (!mute) playWrong();
@@ -704,12 +706,12 @@ function WebApp() {
               </button>
               <button
                 onClick={() => {
-                  setGameOption("Premier League Top Scorers 22/23");
-                  assignNonMusic("Premier League Top Scorers 22/23");
+                  setGameOption("Top Scorers 22/23");
+                  assignNonMusic("Top Scorers 22/23");
                   displayGameBoard();
                 }}
               >
-                Premier League Top Scorers 22/23
+                Top Scorers 22/23
               </button>
             </div>
             <div

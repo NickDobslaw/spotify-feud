@@ -16,6 +16,7 @@ function MobileApp() {
   const clientId = "8c307a26103a46938a902a46e8ac59a8";
   const clientSecret = "eaf9ea34a9d941f39c4f825442b4b821";
   const redirectUri = "https://NickDobslaw.github.io/spotify-feud";
+  //const redirectUri = "http://localhost:3000";
 
   const [playRight] = useSound(rightSound, {volume: 0.25});
   const [playWrong] = useSound(wrongSound, {volume: 0.5});
@@ -453,6 +454,8 @@ function MobileApp() {
       case "Disney Channel Shows":
       case "Pixar Films":
       case "Cartoon Network Shows":
+      case "Nickelodeon Shows":
+      case "Top Scorers 22/23":
         compArray = [...nonMusicData];
         break;
       default:
@@ -500,28 +503,32 @@ function MobileApp() {
       case "Fast Food":
       case "Disney Channel Shows":
       case "Pixar Films":
+      case "Cartoon Network Shows":
+      case "Nickelodeon Shows":
+      case "Top Scorers 22/23":
         compArray = [...nonMusicData];
         break;
       default:
         break;
     }
     console.log(compArray);
-    if (!answered.includes(guessText.toLowerCase())) setGuessText("");
-    if (compArray.includes(guessText.toLowerCase())) {
-      if (!answered.includes(guessText.toLowerCase())) {
+    let guessTrimmed = guessText.trim().replace(/[\u2018\u2019]/g, "'");
+    if (!answered.includes(guessTrimmed.toLowerCase())) setGuessText("");
+    if (compArray.includes(guessTrimmed.toLowerCase())) {
+      if (!answered.includes(guessTrimmed.toLowerCase())) {
         if (!mute) playRight();
-        let index = compArray.indexOf(guessText.toLowerCase());
+        let index = compArray.indexOf(guessTrimmed.toLowerCase());
         document.getElementById(`listItem${index + 1}Mobile`).style.display =
           "none";
         document.getElementById(`correct${index + 1}Mobile`).style.display =
           "block";
         let tempAnswered = [...answered];
-        tempAnswered.push(guessText.toLowerCase());
+        tempAnswered.push(guessTrimmed.toLowerCase());
         if (tempAnswered.length === compArray.length) displayWin();
         setAnswered(tempAnswered);
       }
     } else {
-      if (guessText.length > 0) {
+      if (guessTrimmed.length > 0) {
         if (xs.length === 0) {
           setXs("X");
           if (!mute) playWrong();
@@ -694,6 +701,24 @@ function MobileApp() {
                 }}
               >
                 Cartoon Network Shows
+              </button>
+              <button
+                onClick={() => {
+                  setGameOption("Nickelodeon Shows");
+                  assignNonMusic("Nickelodeon Shows");
+                  displayGameBoard();
+                }}
+              >
+                Nickelodeon Shows
+              </button>
+              <button
+                onClick={() => {
+                  setGameOption("Top Scorers 22/23");
+                  assignNonMusic("Top Scorers 22/23");
+                  displayGameBoard();
+                }}
+              >
+                Top Scorers 22/23
               </button>
             </div>
             <div
