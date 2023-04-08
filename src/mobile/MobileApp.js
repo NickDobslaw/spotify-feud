@@ -28,6 +28,7 @@ function MobileApp() {
   const [albumMode, setAlbumMode] = useState(false);
   const [guessText, setGuessText] = useState("");
   const [topTracks, setTopTracks] = useState([]);
+  const [albumComp, setAlbumComp] = useState(0);
   const [albumTopTracks, setAlbumTopTracks] = useState([]);
   const [topTracksLC, setTopTracksLC] = useState([]);
   const [gameOption, setGameOption] = useState("");
@@ -100,6 +101,11 @@ function MobileApp() {
     // }
     // setToken(token);
   }, []);
+
+  useEffect(() => {
+    if (albumComp === albumTopTracks.length) logAlbumGameData();
+  }, [albumTopTracks, albumComp]);
+
   async function authorize() {
     let codeVerifier = generateRandomString(128);
     console.log(codeVerifier);
@@ -214,7 +220,8 @@ function MobileApp() {
     let tempData = artistData.tracks.map((track) => {
       let name = track.name;
       let nameLC = name.toLowerCase();
-      if (name.includes("-")) name = name.slice(0, name.indexOf("-")).trim();
+      if (name.includes(" - "))
+        name = name.slice(0, name.indexOf(" - ")).trim();
       if (name.includes("(")) name = name.slice(0, name.indexOf("(")).trim();
       if (nameLC.includes("feat"))
         name = name.slice(0, nameLC.indexOf("feat")).trim();
@@ -249,9 +256,11 @@ function MobileApp() {
         return album.album_group === "album";
       });
       tempData.forEach((data) => {
-        if (data.name.includes("(")) {
-          data.name = data.name.slice(0, data.name.indexOf("(")).trim();
-        }
+        if (data.name.includes("("))
+          data.name = data.name.slice(0, data.name.indexOf("("));
+        if (data.name.includes(" - "))
+          data.name = data.name.slice(0, data.name.indexOf(" - "));
+        data.name = data.name.trim();
       });
       let unique = [];
       let uniqueNames = [];
@@ -281,9 +290,7 @@ function MobileApp() {
         trackData.push(data);
         trackData.sort((a, b) => b.popularity - a.popularity);
         setAlbumTopTracks(trackData);
-        if (tempData.length === trackData.length) {
-          logAlbumGameData();
-        }
+        setAlbumComp(trackData.length);
       });
     });
   }
@@ -302,6 +309,7 @@ function MobileApp() {
       let tempLC = tempData.map((str) => str.toLowerCase());
       tempLC = tempLC.map((data) => {
         if (data.includes("(")) data = data.slice(0, data.indexOf("("));
+        if (data.includes(" - ")) data = data.slice(0, data.indexOf(" - "));
         if (data.includes("feat")) data = data.slice(0, data.indexOf("feat"));
         if (data.includes("ft")) data = data.slice(0, data.indexOf("ft"));
         return data.trim();
@@ -316,8 +324,6 @@ function MobileApp() {
       setAnswers(answerData);
       document.getElementById("artistSearchMobile").style.display = "none";
       displayGameBoard();
-    } else {
-      document.getElementById("tryAgain").style.display = "block";
     }
   }
 
@@ -350,7 +356,8 @@ function MobileApp() {
     let tempData = tempTracks.map((track) => {
       let name = track.name;
       let nameLC = name.toLowerCase();
-      if (name.includes("-")) name = name.slice(0, name.indexOf("-")).trim();
+      if (name.includes(" - "))
+        name = name.slice(0, name.indexOf(" - ")).trim();
       if (name.includes("(")) name = name.slice(0, name.indexOf("(")).trim();
       if (nameLC.includes("feat"))
         name = name.slice(0, nameLC.indexOf("feat")).trim();
@@ -1000,9 +1007,6 @@ function MobileApp() {
               >
                 Search
               </button>
-              <h5 id="tryAgain" style={{display: "none"}}>
-                Try again.
-              </h5>
               <div>
                 {artistData.map((artist, index) => {
                   return (

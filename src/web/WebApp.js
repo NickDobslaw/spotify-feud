@@ -40,6 +40,7 @@ function WebApp() {
   const [answered, setAnswered] = useState([]);
   const [artistData, setArtistData] = useState([]);
   const [gameTitle, setGameTitle] = useState("");
+  const [albumComp, setAlbumComp] = useState(0);
   const [relatedArtists, setRelatedArtists] = useState([]);
   const [selectedArtist, setSelectedArtist] = useState(undefined);
   const [selectedAlbum, setSelectedAlbum] = useState(undefined);
@@ -100,6 +101,11 @@ function WebApp() {
     // }
     // setToken(token);
   }, []);
+
+  useEffect(() => {
+    if (albumComp === albumTopTracks.length) logAlbumGameData();
+  }, [albumTopTracks, albumComp]);
+
   async function authorize() {
     let codeVerifier = generateRandomString(128);
     console.log(codeVerifier);
@@ -214,7 +220,8 @@ function WebApp() {
     let tempData = artistData.tracks.map((track) => {
       let name = track.name;
       let nameLC = name.toLowerCase();
-      if (name.includes("-")) name = name.slice(0, name.indexOf("-")).trim();
+      if (name.includes(" - "))
+        name = name.slice(0, name.indexOf(" - ")).trim();
       if (name.includes("(")) name = name.slice(0, name.indexOf("(")).trim();
       if (nameLC.includes("feat"))
         name = name.slice(0, nameLC.indexOf("feat")).trim();
@@ -249,9 +256,11 @@ function WebApp() {
         return album.album_group === "album";
       });
       tempData.forEach((data) => {
-        if (data.name.includes("(")) {
-          data.name = data.name.slice(0, data.name.indexOf("(")).trim();
-        }
+        if (data.name.includes("("))
+          data.name = data.name.slice(0, data.name.indexOf("("));
+        if (data.name.includes(" - "))
+          data.name = data.name.slice(0, data.name.indexOf(" - "));
+        data.name = data.name.trim();
       });
       let unique = [];
       let uniqueNames = [];
@@ -281,9 +290,7 @@ function WebApp() {
         trackData.push(data);
         trackData.sort((a, b) => b.popularity - a.popularity);
         setAlbumTopTracks(trackData);
-        if (tempData.length === trackData.length) {
-          logAlbumGameData();
-        }
+        setAlbumComp(trackData.length);
       });
     });
   }
@@ -302,6 +309,7 @@ function WebApp() {
       let tempLC = tempData.map((str) => str.toLowerCase());
       tempLC = tempLC.map((data) => {
         if (data.includes("(")) data = data.slice(0, data.indexOf("("));
+        if (data.includes(" - ")) data = data.slice(0, data.indexOf(" - "));
         if (data.includes("feat")) data = data.slice(0, data.indexOf("feat"));
         if (data.includes("ft")) data = data.slice(0, data.indexOf("ft"));
         return data.trim();
@@ -316,8 +324,6 @@ function WebApp() {
       setAnswers(answerData);
       document.getElementById("artistSearch").style.display = "none";
       displayGameBoard();
-    } else {
-      document.getElementById("tryAgain").style.display = "block";
     }
   }
 
@@ -990,9 +996,6 @@ function WebApp() {
               >
                 Search
               </button>
-              <h5 id="tryAgain" style={{display: "none"}}>
-                Try again.
-              </h5>
               <div>
                 {artistData.map((artist, index) => {
                   return (
