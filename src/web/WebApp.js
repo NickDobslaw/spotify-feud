@@ -11,12 +11,13 @@ import textLogo from "../images/textLogo.png";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faVolumeHigh} from "@fortawesome/free-solid-svg-icons";
 import {faVolumeXmark} from "@fortawesome/free-solid-svg-icons";
+import {faToggleOn, faToggleOff} from "@fortawesome/free-solid-svg-icons";
 
 function WebApp() {
   const clientId = "8c307a26103a46938a902a46e8ac59a8";
   const clientSecret = "eaf9ea34a9d941f39c4f825442b4b821";
-  const redirectUri = "https://NickDobslaw.github.io/spotify-feud";
-  //const redirectUri = "http://localhost:3000";
+  //const redirectUri = "https://NickDobslaw.github.io/spotify-feud";
+  const redirectUri = "http://localhost:3000";
 
   const [playRight] = useSound(rightSound, {volume: 0.25});
   const [playWrong] = useSound(wrongSound, {volume: 0.5});
@@ -26,10 +27,12 @@ function WebApp() {
   const [token, setToken] = useState("");
   const [mute, toggleMute] = useState(false);
   const [albumMode, setAlbumMode] = useState(false);
+  const [noFailMode, setNoFailMode] = useState(false);
   const [albumGameData, setAlbumGameData] = useState([]);
   const [guessText, setGuessText] = useState("");
   const [topTracks, setTopTracks] = useState([]);
   const [topTracksLC, setTopTracksLC] = useState([]);
+  const [authorized, setAuthorized] = useState(false);
   const [gameOption, setGameOption] = useState("");
   const [searchKey, setSearchKey] = useState("");
   const [artistAlbums, setArtistAlbums] = useState([]);
@@ -49,6 +52,7 @@ function WebApp() {
   const [nonMusicData, setNonMusicData] = useState(undefined);
   const [xs, setXs] = useState("");
   const [volumeIcon, setVolumeIcon] = useState(faVolumeHigh);
+  const [noFailIcon, setNoFailIcon] = useState(faToggleOff);
 
   function generateRandomString(length) {
     let text = "";
@@ -79,8 +83,10 @@ function WebApp() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get("code") && !token) {
+      document.getElementById("blueLogo").style.display = "none";
       document.getElementById("loginButton").style.display = "none";
-      document.getElementById("enterButton").style.display = "block";
+      document.getElementById("textLogo").style.display = "none";
+      request();
     }
 
     // if (!token && localStorage.accessToken) setToken(localStorage.accessToken);
@@ -104,7 +110,7 @@ function WebApp() {
 
   useEffect(() => {
     if (albumComp === albumTopTracks.length) logAlbumGameData();
-  }, [albumTopTracks, albumComp]);
+  }, [albumComp]);
 
   async function authorize() {
     let codeVerifier = generateRandomString(128);
@@ -166,6 +172,7 @@ function WebApp() {
 
   const logout = () => {
     document.getElementById("blueLogo").style.display = "block";
+    document.getElementById("textLogo").style.display = "block";
     setToken("");
     window.localStorage.removeItem("accessToken");
     let urlParams = new URLSearchParams(window.location.search);
@@ -222,6 +229,7 @@ function WebApp() {
       let nameLC = name.toLowerCase();
       if (name.includes(" - "))
         name = name.slice(0, name.indexOf(" - ")).trim();
+      if (name.includes("|")) name = name.slice(0, name.indexOf("|")).trim();
       if (name.includes("(")) name = name.slice(0, name.indexOf("(")).trim();
       if (nameLC.includes("feat"))
         name = name.slice(0, nameLC.indexOf("feat")).trim();
@@ -310,6 +318,7 @@ function WebApp() {
       tempLC = tempLC.map((data) => {
         if (data.includes("(")) data = data.slice(0, data.indexOf("("));
         if (data.includes(" - ")) data = data.slice(0, data.indexOf(" - "));
+        if (data.includes("|")) data = data.slice(0, data.indexOf("|"));
         if (data.includes("feat")) data = data.slice(0, data.indexOf("feat"));
         if (data.includes("ft")) data = data.slice(0, data.indexOf("ft"));
         return data.trim();
@@ -678,7 +687,7 @@ function WebApp() {
         setAnswered(tempAnswered);
       }
     } else {
-      if (guessTrimmed.length > 0) {
+      if (guessTrimmed.length > 0 && !noFailMode) {
         if (xs.length === 0) {
           setXs("X");
           if (!mute) playWrong();
@@ -710,7 +719,33 @@ function WebApp() {
           if (!mute) playWrong();
           document.getElementById("xs").style.display = "block";
           document.getElementById("guessInput").disabled = true;
+          setTimeout(() => {
+            document.getElementById("xs").style.display = "none";
+            revealRest(compArray);
+          }, 1500);
         }
+      }
+    }
+  }
+
+  function revealRest(arr) {
+    let delay = 0;
+    let count = answered.length;
+    for (let i = arr.length - 1; i >= 0; i--) {
+      if (!answered.includes(arr[i])) {
+        count++;
+        console.log(count);
+        console.log(arr.length);
+        setTimeout(() => {
+          playRight();
+          document.getElementById(`listItem${i + 1}`).style.display = "none";
+          document.getElementById(`correct${i + 1}`).style.display = "block";
+        }, 1000 + delay);
+        if (count === arr.length)
+          setTimeout(() => {
+            playWin();
+          }, 1200 + delay);
+        delay += 2000;
       }
     }
   }
@@ -725,7 +760,7 @@ function WebApp() {
     <div className="App">
       <header className="App-header">
         <img alt="" className="blueLogo" id="blueLogo" src={blueLogo} />
-        <img alt="" className="textLogo" src={textLogo}></img>
+        <img alt="" className="textLogo" id="textLogo" src={textLogo}></img>
         {!token ? (
           <>
             <button
@@ -734,9 +769,6 @@ function WebApp() {
               onClick={authorize}
             >
               Log In with Spotify
-            </button>
-            <button className="enterButton" id="enterButton" onClick={request}>
-              Start
             </button>
           </>
         ) : (
@@ -760,23 +792,27 @@ function WebApp() {
               />
             </a>
             <a
-              class="active"
+              className="noFailIcon"
               onClick={() => {
-                toggleMute(!mute);
-                if (volumeIcon === faVolumeHigh) setVolumeIcon(faVolumeXmark);
-                else setVolumeIcon(faVolumeHigh);
+                setNoFailMode(!noFailMode);
+                if (noFailIcon === faToggleOff) setNoFailIcon(faToggleOn);
+                else setNoFailIcon(faToggleOff);
               }}
               style={{cursor: "pointer"}}
             >
               <FontAwesomeIcon
                 style={{display: "inline-block", marginLeft: "20px"}}
-                className="volumeIcon"
+                className="noFail"
                 id="xIcon"
                 size="xl"
                 color="white"
-                icon={volumeIcon}
+                icon={noFailIcon}
               />
+              <h4 style={{display: "inline-block", marginLeft: "10px"}}>
+                {noFailMode ? "No Fail Mode ON" : "No Fail Mode OFF"}
+              </h4>
             </a>
+            <img alt="" className="textLogo" src={textLogo}></img>
             <div id="gameTypeOptions" className="gameOptions">
               <button
                 onClick={() => {

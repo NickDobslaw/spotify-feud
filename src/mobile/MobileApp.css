@@ -59,7 +59,19 @@ header h1 {
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;
-  display: block;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.backButton {
+  background-color: #0852c3; /* Green */
+  border: none;
+  color: #FFFFF2;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: none;
   font-size: 16px;
   cursor: pointer;
 }
