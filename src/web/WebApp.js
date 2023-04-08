@@ -25,11 +25,15 @@ function WebApp() {
 
   const [token, setToken] = useState("");
   const [mute, toggleMute] = useState(false);
+  const [albumMode, setAlbumMode] = useState(false);
+  const [albumGameData, setAlbumGameData] = useState([]);
   const [guessText, setGuessText] = useState("");
   const [topTracks, setTopTracks] = useState([]);
   const [topTracksLC, setTopTracksLC] = useState([]);
   const [gameOption, setGameOption] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [artistAlbums, setArtistAlbums] = useState([]);
+  const [albumTopTracks, setAlbumTopTracks] = useState([]);
   const [topArtists, setTopArtists] = useState([]);
   const [topArtistsLC, setTopArtistsLC] = useState([]);
   const [answers, setAnswers] = useState([]);
@@ -38,6 +42,7 @@ function WebApp() {
   const [gameTitle, setGameTitle] = useState("");
   const [relatedArtists, setRelatedArtists] = useState([]);
   const [selectedArtist, setSelectedArtist] = useState(undefined);
+  const [selectedAlbum, setSelectedAlbum] = useState(undefined);
   const [artistTopTracks, setArtistTopTracks] = useState(undefined);
   const [artistTopTracksLC, setArtistTopTracksLC] = useState(undefined);
   const [nonMusicData, setNonMusicData] = useState(undefined);
@@ -169,6 +174,7 @@ function WebApp() {
   }
 
   async function logArtistData() {
+    setAlbumMode(false);
     const artistData = await getArtistData();
     console.log(artistData.artists.items);
     setArtistData(artistData.artists.items);
@@ -229,6 +235,90 @@ function WebApp() {
     setGameTitle(artist.name + "'s Top Tracks");
     document.getElementById("artistSearch").style.display = "none";
     displayGameBoard();
+  }
+
+  async function getArtistAlbums(id) {
+    return await fetchWebApi(`v1/artists/${id}/albums?limit=50`, "GET");
+  }
+
+  async function logArtistAlbums(artist) {
+    const albumData = await getArtistAlbums(artist.id);
+    console.log(albumData);
+    if (albumData.items.length > 0) {
+      let tempData = albumData.items.filter((album) => {
+        return album.album_group === "album";
+      });
+      tempData.forEach((data) => {
+        if (data.name.includes("(")) {
+          data.name = data.name.slice(0, data.name.indexOf("(")).trim();
+        }
+      });
+      let unique = [];
+      let uniqueNames = [];
+      tempData.forEach((album) => {
+        if (!uniqueNames.includes(album.name)) {
+          uniqueNames.push(album.name);
+          unique.push(album);
+        }
+      });
+      console.log(unique);
+      setAlbumMode(true);
+      setArtistData(unique);
+    }
+  }
+
+  async function getAlbumTopTracks(id) {
+    return await fetchWebApi(`v1/albums/${id}/tracks?limit=50`, "GET");
+  }
+
+  async function logAlbumTopTracks(artist) {
+    setSelectedAlbum(artist);
+    const albumData = await getAlbumTopTracks(artist.id);
+    let tempData = albumData.items;
+    let trackData = [];
+    tempData.forEach(async (data) => {
+      await getTrackInfo(data.id).then((data) => {
+        trackData.push(data);
+        trackData.sort((a, b) => b.popularity - a.popularity);
+        setAlbumTopTracks(trackData);
+        if (tempData.length === trackData.length) {
+          logAlbumGameData();
+        }
+      });
+    });
+  }
+
+  async function getTrackInfo(id) {
+    const trackData = await fetchWebApi(`v1/tracks/${id}`, "GET");
+    return trackData;
+  }
+
+  function logAlbumGameData() {
+    if (albumTopTracks.length > 0) {
+      let tempData = albumTopTracks.map((data) => {
+        return data.name;
+      });
+      if (tempData.length > 8) tempData = tempData.slice(0, 8);
+      let tempLC = tempData.map((str) => str.toLowerCase());
+      tempLC = tempLC.map((data) => {
+        if (data.includes("(")) data = data.slice(0, data.indexOf("("));
+        if (data.includes("feat")) data = data.slice(0, data.indexOf("feat"));
+        if (data.includes("ft")) data = data.slice(0, data.indexOf("ft"));
+        return data.trim();
+      });
+      let answerData = tempData.map((str) => {
+        if (str.length > 16) return str.slice(0, 15) + "...";
+        else return str;
+      });
+      console.log(tempLC);
+      console.log(answerData);
+      setAlbumGameData(tempLC);
+      setAnswers(answerData);
+      document.getElementById("artistSearch").style.display = "none";
+      displayGameBoard();
+    } else {
+      document.getElementById("tryAgain").style.display = "block";
+    }
   }
 
   async function fetchWebApi(endpoint, method, body) {
@@ -358,6 +448,52 @@ function WebApp() {
           "Jimmy Neutron",
         ];
         break;
+      case "Receiving Yards 22/23":
+        tempData = [
+          "Justin Jefferson",
+          "Tyreek Hill",
+          "Davante Adams",
+          "A.J. Brown",
+          "Stefon Diggs",
+          "CeeDee Lamb",
+          "Jaylen Waddle",
+          "Travis Kelce",
+        ];
+        break;
+      case "Receiving Yards All Time":
+        tempData = [
+          "Jerry Rice",
+          "Larry Fitzgerald",
+          "Terrell Owens",
+          "Randy Moss",
+          "Isaac Bruce",
+          "Tony Gonzalez",
+          "Tim Brown",
+          "Steve Smith Sr.",
+        ];
+        break;
+      case "Video Games":
+        tempData = [
+          "Minecraft",
+          "Grand Theft Auto V",
+          "Tetris",
+          "Wii Sports",
+          "PUBG",
+          "Mario Kart",
+          "Super Mario Bros.",
+          "Red Dead Redemption 2",
+        ];
+        answerData = [
+          "minecraft",
+          "gta 5",
+          "tetris",
+          "wii sports",
+          "pubg",
+          "mario kart",
+          "super mario bros",
+          "red dead redemption 2",
+        ];
+        break;
       case "Top Scorers 22/23":
         tempData = [
           "Erling Haaland",
@@ -449,6 +585,9 @@ function WebApp() {
       case "Related":
         compArray = [...relatedArtists];
         break;
+      case "Album's Top Songs":
+        compArray = [...albumGameData];
+        break;
       case "Dog Breeds":
       case "Fast Food":
       case "Disney Channel Shows":
@@ -456,6 +595,9 @@ function WebApp() {
       case "Cartoon Network Shows":
       case "Nickelodeon Shows":
       case "Top Scorers 22/23":
+      case "Video Games":
+      case "Receiving Yards All Time":
+      case "Receiving Yards 22/23":
         compArray = [...nonMusicData];
         break;
       default:
@@ -497,6 +639,9 @@ function WebApp() {
       case "Related":
         compArray = [...relatedArtists];
         break;
+      case "Album's Top Songs":
+        compArray = [...albumGameData];
+        break;
       case "Dog Breeds":
       case "Fast Food":
       case "Disney Channel Shows":
@@ -504,6 +649,9 @@ function WebApp() {
       case "Cartoon Network Shows":
       case "Nickelodeon Shows":
       case "Top Scorers 22/23":
+      case "Video Games":
+      case "Receiving Yards All Time":
+      case "Receiving Yards 22/23":
         compArray = [...nonMusicData];
         break;
       default:
@@ -713,6 +861,33 @@ function WebApp() {
               >
                 Top Scorers 22/23
               </button>
+              <button
+                onClick={() => {
+                  setGameOption("Receiving Yards 22/23");
+                  assignNonMusic("Receiving Yards 22/23");
+                  displayGameBoard();
+                }}
+              >
+                Receiving Yards 22/23
+              </button>
+              <button
+                onClick={() => {
+                  setGameOption("Receiving Yards All Time");
+                  assignNonMusic("Receiving Yards All Time");
+                  displayGameBoard();
+                }}
+              >
+                Receiving Yards All Time
+              </button>
+              <button
+                onClick={() => {
+                  setGameOption("Video Games");
+                  assignNonMusic("Video Games");
+                  displayGameBoard();
+                }}
+              >
+                Video Games
+              </button>
             </div>
             <div
               id="gameOptions"
@@ -773,6 +948,24 @@ function WebApp() {
               >
                 Related Artists
               </button>
+              <button
+                onClick={() => {
+                  document.getElementById("gameOptions").style.display = "none";
+                  document.getElementById("artistSearch").style.display =
+                    "block";
+                  document
+                    .getElementById("searchInput")
+                    .addEventListener("keypress", function (event) {
+                      if (event.key === "Enter") {
+                        event.preventDefault();
+                        document.getElementById("searchButton").click();
+                      }
+                    });
+                  setGameOption("Album's Top Songs");
+                }}
+              >
+                Album's Top Songs
+              </button>
             </div>
             <div
               className="artistSearch"
@@ -797,6 +990,9 @@ function WebApp() {
               >
                 Search
               </button>
+              <h5 id="tryAgain" style={{display: "none"}}>
+                Try again.
+              </h5>
               <div>
                 {artistData.map((artist, index) => {
                   return (
@@ -811,6 +1007,11 @@ function WebApp() {
                               if (gameOption === "Artists Top Tracks")
                                 logArtistTopTracks(artist);
                               if (gameOption === "Related") logRelated(artist);
+                              if (gameOption === "Album's Top Songs") {
+                                if (albumMode) {
+                                  logAlbumTopTracks(artist);
+                                } else logArtistAlbums(artist);
+                              }
                             }}
                           >
                             <div
@@ -835,43 +1036,52 @@ function WebApp() {
                               </h4>
                             </div>
                           </a>
-                          <a
-                            class="active"
-                            style={{cursor: "pointer"}}
-                            onClick={() => {
-                              setSelectedArtist(artistData[index + 1]);
-                              if (gameOption === "Artists Top Tracks")
-                                logArtistTopTracks(artistData[index + 1]);
-                              if (gameOption === "Related")
-                                logRelated(artistData[index + 1]);
-                            }}
-                          >
-                            <div
-                              className="artistBlock"
-                              style={{
-                                alignItems: "center",
-                                display: "inline-block",
+                          {artistData[index + 1] ? (
+                            <a
+                              class="active"
+                              style={{cursor: "pointer"}}
+                              onClick={() => {
+                                setSelectedArtist(artistData[index + 1]);
+                                if (gameOption === "Artists Top Tracks")
+                                  logArtistTopTracks(artistData[index + 1]);
+                                if (gameOption === "Related")
+                                  logRelated(artistData[index + 1]);
+                                if (gameOption === "Album's Top Songs") {
+                                  if (albumMode) {
+                                    logAlbumTopTracks(artistData[index + 1]);
+                                  } else logArtistAlbums(artistData[index + 1]);
+                                }
                               }}
                             >
-                              {artistData[index + 1].images.length > 0 ? (
-                                <div className="artistImgWrapper">
-                                  <img
-                                    style={{display: "inline-block"}}
-                                    alt=""
-                                    src={artistData[index + 1].images[0].url}
-                                  />
-                                </div>
-                              ) : (
-                                ""
-                              )}
-                              <h4 style={{display: "inline-block"}}>
-                                {artistData[index + 1].name.length > 15
-                                  ? artistData[index + 1].name.slice(0, 15) +
-                                    "..."
-                                  : artistData[index + 1].name}
-                              </h4>
-                            </div>
-                          </a>
+                              <div
+                                className="artistBlock"
+                                style={{
+                                  alignItems: "center",
+                                  display: "inline-block",
+                                }}
+                              >
+                                {artistData[index + 1].images.length > 0 ? (
+                                  <div className="artistImgWrapper">
+                                    <img
+                                      style={{display: "inline-block"}}
+                                      alt=""
+                                      src={artistData[index + 1].images[0].url}
+                                    />
+                                  </div>
+                                ) : (
+                                  ""
+                                )}
+                                <h4 style={{display: "inline-block"}}>
+                                  {artistData[index + 1].name.length > 15
+                                    ? artistData[index + 1].name.slice(0, 15) +
+                                      "..."
+                                    : artistData[index + 1].name}
+                                </h4>
+                              </div>
+                            </a>
+                          ) : (
+                            ""
+                          )}
                         </div>
                       ) : (
                         ""
@@ -882,7 +1092,13 @@ function WebApp() {
               </div>
             </div>
             <div id="gameBoard" className="gameBoard">
-              <h2>{gameTitle ? gameTitle : gameOption}</h2>
+              <h2>
+                {selectedAlbum
+                  ? selectedAlbum.name + "'s Top Tracks"
+                  : gameTitle
+                  ? gameTitle
+                  : gameOption}
+              </h2>
               <div className="board">
                 <div style={{display: "inline-block"}} className="column1">
                   {answers.length > 0 ? (

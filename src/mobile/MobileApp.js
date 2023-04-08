@@ -25,11 +25,15 @@ function MobileApp() {
 
   const [token, setToken] = useState("");
   const [mute, toggleMute] = useState(false);
+  const [albumMode, setAlbumMode] = useState(false);
   const [guessText, setGuessText] = useState("");
   const [topTracks, setTopTracks] = useState([]);
+  const [albumTopTracks, setAlbumTopTracks] = useState([]);
   const [topTracksLC, setTopTracksLC] = useState([]);
   const [gameOption, setGameOption] = useState("");
   const [searchKey, setSearchKey] = useState("");
+  const [artistAlbums, setArtistAlbums] = useState([]);
+  const [albumGameData, setAlbumGameData] = useState([]);
   const [topArtists, setTopArtists] = useState([]);
   const [topArtistsLC, setTopArtistsLC] = useState([]);
   const [answers, setAnswers] = useState([]);
@@ -38,6 +42,7 @@ function MobileApp() {
   const [gameTitle, setGameTitle] = useState("");
   const [relatedArtists, setRelatedArtists] = useState([]);
   const [selectedArtist, setSelectedArtist] = useState(undefined);
+  const [selectedAlbum, setSelectedAlbum] = useState(undefined);
   const [artistTopTracks, setArtistTopTracks] = useState(undefined);
   const [artistTopTracksLC, setArtistTopTracksLC] = useState(undefined);
   const [nonMusicData, setNonMusicData] = useState(undefined);
@@ -169,6 +174,7 @@ function MobileApp() {
   }
 
   async function logArtistData() {
+    setAlbumMode(false);
     const artistData = await getArtistData();
     console.log(artistData.artists.items);
     setArtistData(artistData.artists.items);
@@ -185,7 +191,7 @@ function MobileApp() {
     });
     tempData = tempData.slice(0, 8);
     let answerData = artistData.artists.map((ar) => {
-      if (ar.name.length > 17) return ar.name.slice(0, 17) + "...";
+      if (ar.name.length > 16) return ar.name.slice(0, 15) + "...";
       else return ar.name;
     });
     answerData = answerData.slice(0, 8);
@@ -215,7 +221,7 @@ function MobileApp() {
       return name.trim();
     });
     let answerData = artistData.tracks.map((track) => {
-      if (track.name.length > 15) return track.name.slice(0, 15).trim() + "...";
+      if (track.name.length > 16) return track.name.slice(0, 15).trim() + "...";
       else return track.name.trim();
     });
     if (tempData.length > 8) {
@@ -229,6 +235,90 @@ function MobileApp() {
     setGameTitle(artist.name + "'s Top Tracks");
     document.getElementById("artistSearchMobile").style.display = "none";
     displayGameBoard();
+  }
+
+  async function getArtistAlbums(id) {
+    return await fetchWebApi(`v1/artists/${id}/albums?limit=50`, "GET");
+  }
+
+  async function logArtistAlbums(artist) {
+    const albumData = await getArtistAlbums(artist.id);
+    console.log(albumData);
+    if (albumData.items.length > 0) {
+      let tempData = albumData.items.filter((album) => {
+        return album.album_group === "album";
+      });
+      tempData.forEach((data) => {
+        if (data.name.includes("(")) {
+          data.name = data.name.slice(0, data.name.indexOf("(")).trim();
+        }
+      });
+      let unique = [];
+      let uniqueNames = [];
+      tempData.forEach((album) => {
+        if (!uniqueNames.includes(album.name)) {
+          uniqueNames.push(album.name);
+          unique.push(album);
+        }
+      });
+      console.log(unique);
+      setAlbumMode(true);
+      setArtistData(unique);
+    }
+  }
+
+  async function getAlbumTopTracks(id) {
+    return await fetchWebApi(`v1/albums/${id}/tracks?limit=50`, "GET");
+  }
+
+  async function logAlbumTopTracks(artist) {
+    setSelectedAlbum(artist);
+    const albumData = await getAlbumTopTracks(artist.id);
+    let tempData = albumData.items;
+    let trackData = [];
+    tempData.forEach(async (data) => {
+      await getTrackInfo(data.id).then((data) => {
+        trackData.push(data);
+        trackData.sort((a, b) => b.popularity - a.popularity);
+        setAlbumTopTracks(trackData);
+        if (tempData.length === trackData.length) {
+          logAlbumGameData();
+        }
+      });
+    });
+  }
+
+  async function getTrackInfo(id) {
+    const trackData = await fetchWebApi(`v1/tracks/${id}`, "GET");
+    return trackData;
+  }
+
+  function logAlbumGameData() {
+    if (albumTopTracks.length > 0) {
+      let tempData = albumTopTracks.map((data) => {
+        return data.name;
+      });
+      if (tempData.length > 8) tempData = tempData.slice(0, 8);
+      let tempLC = tempData.map((str) => str.toLowerCase());
+      tempLC = tempLC.map((data) => {
+        if (data.includes("(")) data = data.slice(0, data.indexOf("("));
+        if (data.includes("feat")) data = data.slice(0, data.indexOf("feat"));
+        if (data.includes("ft")) data = data.slice(0, data.indexOf("ft"));
+        return data.trim();
+      });
+      let answerData = tempData.map((str) => {
+        if (str.length > 16) return str.slice(0, 15) + "...";
+        else return str;
+      });
+      console.log(tempLC);
+      console.log(answerData);
+      setAlbumGameData(tempLC);
+      setAnswers(answerData);
+      document.getElementById("artistSearchMobile").style.display = "none";
+      displayGameBoard();
+    } else {
+      document.getElementById("tryAgain").style.display = "block";
+    }
   }
 
   async function fetchWebApi(endpoint, method, body) {
@@ -358,6 +448,52 @@ function MobileApp() {
           "Jimmy Neutron",
         ];
         break;
+      case "Receiving Yards 22/23":
+        tempData = [
+          "Justin Jefferson",
+          "Tyreek Hill",
+          "Davante Adams",
+          "A.J. Brown",
+          "Stefon Diggs",
+          "CeeDee Lamb",
+          "Jaylen Waddle",
+          "Travis Kelce",
+        ];
+        break;
+      case "Receiving Yards All Time":
+        tempData = [
+          "Jerry Rice",
+          "Larry Fitzgerald",
+          "Terrell Owens",
+          "Randy Moss",
+          "Isaac Bruce",
+          "Tony Gonzalez",
+          "Tim Brown",
+          "Steve Smith Sr.",
+        ];
+        break;
+      case "Video Games":
+        tempData = [
+          "Minecraft",
+          "Grand Theft Auto V",
+          "Tetris",
+          "Wii Sports",
+          "PUBG",
+          "Mario Kart",
+          "Super Mario Bros.",
+          "Red Dead Redemption 2",
+        ];
+        answerData = [
+          "minecraft",
+          "gta 5",
+          "tetris",
+          "wii sports",
+          "pubg",
+          "mario kart",
+          "super mario bros",
+          "red dead redemption 2",
+        ];
+        break;
       case "Top Scorers 22/23":
         tempData = [
           "Erling Haaland",
@@ -449,6 +585,9 @@ function MobileApp() {
       case "Related":
         compArray = [...relatedArtists];
         break;
+      case "Album's Top Songs":
+        compArray = [...albumGameData];
+        break;
       case "Dog Breeds":
       case "Fast Food":
       case "Disney Channel Shows":
@@ -456,6 +595,9 @@ function MobileApp() {
       case "Cartoon Network Shows":
       case "Nickelodeon Shows":
       case "Top Scorers 22/23":
+      case "Video Games":
+      case "Receiving Yards All Time":
+      case "Receiving Yards 22/23":
         compArray = [...nonMusicData];
         break;
       default:
@@ -499,6 +641,9 @@ function MobileApp() {
       case "Related":
         compArray = [...relatedArtists];
         break;
+      case "Album's Top Songs":
+        compArray = [...albumGameData];
+        break;
       case "Dog Breeds":
       case "Fast Food":
       case "Disney Channel Shows":
@@ -506,6 +651,9 @@ function MobileApp() {
       case "Cartoon Network Shows":
       case "Nickelodeon Shows":
       case "Top Scorers 22/23":
+      case "Video Games":
+      case "Receiving Yards All Time":
+      case "Receiving Yards 22/23":
         compArray = [...nonMusicData];
         break;
       default:
@@ -720,6 +868,33 @@ function MobileApp() {
               >
                 Top Scorers 22/23
               </button>
+              <button
+                onClick={() => {
+                  setGameOption("Receiving Yards 22/23");
+                  assignNonMusic("Receiving Yards 22/23");
+                  displayGameBoard();
+                }}
+              >
+                Receiving Yards 22/23
+              </button>
+              <button
+                onClick={() => {
+                  setGameOption("Receiving Yards All Time");
+                  assignNonMusic("Receiving Yards All Time");
+                  displayGameBoard();
+                }}
+              >
+                Receiving Yards All Time
+              </button>
+              <button
+                onClick={() => {
+                  setGameOption("Video Games");
+                  assignNonMusic("Video Games");
+                  displayGameBoard();
+                }}
+              >
+                Video Games
+              </button>
             </div>
             <div
               id="gameOptionsMobile"
@@ -782,6 +957,25 @@ function MobileApp() {
               >
                 Related Artists
               </button>
+              <button
+                onClick={() => {
+                  document.getElementById("gameOptionsMobile").style.display =
+                    "none";
+                  document.getElementById("artistSearchMobile").style.display =
+                    "block";
+                  document
+                    .getElementById("searchInputMobile")
+                    .addEventListener("keypress", function (event) {
+                      if (event.key === "Enter") {
+                        event.preventDefault();
+                        document.getElementById("searchButtonMobile").click();
+                      }
+                    });
+                  setGameOption("Album's Top Songs");
+                }}
+              >
+                Album's Top Songs
+              </button>
             </div>
             <div
               className="artistSearchMobile"
@@ -806,6 +1000,9 @@ function MobileApp() {
               >
                 Search
               </button>
+              <h5 id="tryAgain" style={{display: "none"}}>
+                Try again.
+              </h5>
               <div>
                 {artistData.map((artist, index) => {
                   return (
@@ -818,6 +1015,11 @@ function MobileApp() {
                           if (gameOption === "Artists Top Tracks")
                             logArtistTopTracks(artist);
                           if (gameOption === "Related") logRelated(artist);
+                          if (gameOption === "Album's Top Songs") {
+                            if (albumMode) {
+                              logAlbumTopTracks(artist);
+                            } else logArtistAlbums(artist);
+                          }
                         }}
                       >
                         <div
@@ -837,7 +1039,7 @@ function MobileApp() {
                           )}
                           <h4 style={{display: "inline-block"}}>
                             {artist.name.length > 14
-                              ? artist.name.slice(0, 14) + "..."
+                              ? artist.name.slice(0, 13) + "..."
                               : artist.name}
                           </h4>
                         </div>
@@ -848,7 +1050,13 @@ function MobileApp() {
               </div>
             </div>
             <div id="gameBoardMobile" className="gameBoardMobile">
-              <h2>{gameTitle ? gameTitle : gameOption}</h2>
+              <h2>
+                {selectedAlbum
+                  ? selectedAlbum.name + "'s Top Tracks"
+                  : gameTitle
+                  ? gameTitle
+                  : gameOption}
+              </h2>
               <div className="board">
                 <div style={{display: "inline-block"}} className="column1">
                   {answers.length > 0 ? (
