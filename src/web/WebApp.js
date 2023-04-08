@@ -231,6 +231,7 @@ function WebApp() {
         name = name.slice(0, name.indexOf(" - ")).trim();
       if (name.includes("|")) name = name.slice(0, name.indexOf("|")).trim();
       if (name.includes("(")) name = name.slice(0, name.indexOf("(")).trim();
+      name = name.replace(/[\u2018\u2019]/g, "'");
       if (nameLC.includes("feat"))
         name = name.slice(0, nameLC.indexOf("feat")).trim();
       return name.trim();
@@ -321,6 +322,7 @@ function WebApp() {
         if (data.includes("|")) data = data.slice(0, data.indexOf("|"));
         if (data.includes("feat")) data = data.slice(0, data.indexOf("feat"));
         if (data.includes("ft")) data = data.slice(0, data.indexOf("ft"));
+        data = data.replace(/[\u2018\u2019]/g, "'");
         return data.trim();
       });
       let answerData = tempData.map((str) => {
@@ -672,8 +674,12 @@ function WebApp() {
       default:
         break;
     }
+    console.log(guessText);
     console.log(compArray);
-    let guessTrimmed = guessText.trim().replace(/[\u2018\u2019]/g, "'");
+    console.log(compArray[0]);
+    console.log(compArray[0] === guessText);
+    console.log(compArray[0] == guessText);
+    let guessTrimmed = guessText.trim();
     if (!answered.includes(guessTrimmed.toLowerCase())) setGuessText("");
     if (compArray.includes(guessTrimmed.toLowerCase())) {
       if (!answered.includes(guessTrimmed.toLowerCase())) {
