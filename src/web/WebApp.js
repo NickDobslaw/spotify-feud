@@ -16,8 +16,8 @@ import {faToggleOn, faToggleOff} from "@fortawesome/free-solid-svg-icons";
 function WebApp() {
   const clientId = "8c307a26103a46938a902a46e8ac59a8";
   const clientSecret = "eaf9ea34a9d941f39c4f825442b4b821";
-  const redirectUri = "https://NickDobslaw.github.io/spotify-feud";
-  //const redirectUri = "http://localhost:3000";
+  //const redirectUri = "https://NickDobslaw.github.io/spotify-feud";
+  const redirectUri = "http://localhost:3000";
 
   const [playRight] = useSound(rightSound, {volume: 0.25});
   const [playWrong] = useSound(wrongSound, {volume: 0.5});
@@ -271,6 +271,7 @@ function WebApp() {
           data.name = data.name.slice(0, data.name.indexOf(" - "));
         data.name = data.name.trim();
       });
+      tempData.reverse();
       let unique = [];
       let uniqueNames = [];
       tempData.forEach((album) => {
@@ -279,6 +280,7 @@ function WebApp() {
           unique.push(album);
         }
       });
+      unique.reverse();
       console.log(unique);
       setAlbumMode(true);
       setArtistData(unique);
@@ -322,6 +324,7 @@ function WebApp() {
         if (data.includes("|")) data = data.slice(0, data.indexOf("|"));
         if (data.includes("feat")) data = data.slice(0, data.indexOf("feat"));
         if (data.includes("ft")) data = data.slice(0, data.indexOf("ft"));
+        if (data.includes("[")) data = data.slice(0, data.indexOf("["));
         data = data.replace(/[\u2018\u2019]/g, "'");
         return data.trim();
       });
@@ -688,21 +691,22 @@ function WebApp() {
     }
     console.log(guessText);
     console.log(compArray);
-    console.log(compArray[0]);
-    console.log(compArray[0] === guessText);
-    console.log(compArray[0] == guessText);
+    console.log(answers);
     let guessTrimmed = guessText.trim();
     if (!answered.includes(guessTrimmed.toLowerCase())) setGuessText("");
     if (compArray.includes(guessTrimmed.toLowerCase())) {
       if (!answered.includes(guessTrimmed.toLowerCase())) {
         if (!mute) playRight();
-        let index = compArray.indexOf(guessTrimmed.toLowerCase());
-        document.getElementById(`listItem${index + 1}`).style.display = "none";
-        document.getElementById(`correct${index + 1}`).style.display = "block";
         let tempAnswered = [...answered];
-        tempAnswered.push(guessTrimmed.toLowerCase());
-        if (tempAnswered.length === compArray.length) displayWin();
-        setAnswered(tempAnswered);
+        for (let i = 0; i < compArray.length; i++) {
+          if (compArray[i] === guessTrimmed.toLowerCase()) {
+            document.getElementById(`listItem${i + 1}`).style.display = "none";
+            document.getElementById(`correct${i + 1}`).style.display = "block";
+            tempAnswered.push(guessTrimmed.toLowerCase());
+            if (tempAnswered.length === compArray.length) displayWin();
+          }
+          setAnswered(tempAnswered);
+        }
       }
     } else {
       if (guessTrimmed.length > 0 && !noFailMode) {
