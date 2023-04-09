@@ -320,6 +320,7 @@ function MobileApp() {
         if (data.includes("|")) data = data.slice(0, data.indexOf("|"));
         if (data.includes("feat")) data = data.slice(0, data.indexOf("feat"));
         if (data.includes("ft")) data = data.slice(0, data.indexOf("ft"));
+        data = data.replace(/[\u2018\u2019]/g, "'");
         return data.trim();
       });
       let answerData = tempData.map((str) => {

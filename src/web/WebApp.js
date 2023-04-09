@@ -533,11 +533,21 @@ function WebApp() {
           "lautaro",
         ];
         break;
+      case "Netflix Series":
+        tempData = [
+          "Squid Game",
+          "Stranger Things",
+          "Wednesday",
+          "Dahmer",
+          "Money Heist",
+          "Bridgerton",
+          "You",
+          "13 Reasons Why",
+        ];
+        break;
       default:
         break;
     }
-    console.log(tempData);
-    console.log(answerData);
     if (answerData.length > 0) {
       setNonMusicData(answerData);
     } else {
@@ -615,6 +625,7 @@ function WebApp() {
       case "Video Games":
       case "Receiving Yards All Time":
       case "Receiving Yards 22/23":
+      case "Netflix Series":
         compArray = [...nonMusicData];
         break;
       default:
@@ -669,6 +680,7 @@ function WebApp() {
       case "Video Games":
       case "Receiving Yards All Time":
       case "Receiving Yards 22/23":
+      case "Netflix Series":
         compArray = [...nonMusicData];
         break;
       default:
@@ -872,6 +884,15 @@ function WebApp() {
                 }}
               >
                 Pixar Films
+              </button>
+              <button
+                onClick={() => {
+                  setGameOption("Netflix Series");
+                  assignNonMusic("Netflix Series");
+                  displayGameBoard();
+                }}
+              >
+                Netflix Series
               </button>
               <button
                 onClick={() => {
