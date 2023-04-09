@@ -650,7 +650,7 @@ function MobileApp() {
       top:
         document.getElementById("gameBoardMobile").getBoundingClientRect().top -
         document.body.getBoundingClientRect().top -
-        10,
+        100,
     });
     let compArray = undefined;
     switch (gameOption) {
