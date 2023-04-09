@@ -16,8 +16,8 @@ import {faToggleOn, faToggleOff} from "@fortawesome/free-solid-svg-icons";
 function MobileApp() {
   const clientId = "8c307a26103a46938a902a46e8ac59a8";
   const clientSecret = "eaf9ea34a9d941f39c4f825442b4b821";
-  const redirectUri = "https://NickDobslaw.github.io/spotify-feud";
-  //const redirectUri = "http://localhost:3000";
+  //const redirectUri = "https://NickDobslaw.github.io/spotify-feud";
+  const redirectUri = "http://localhost:3000";
 
   const [playRight] = useSound(rightSound, {volume: 0.25});
   const [playWrong] = useSound(wrongSound, {volume: 0.5});
@@ -578,13 +578,14 @@ function MobileApp() {
     document.getElementById("gameBoardMobile").style.display = "block";
     document.getElementById("gameOptionsMobile").style.display = "none";
     document.getElementById("nonMusicGameOptionsMobile").style.display = "none";
-    const input = document.getElementByID("guessInputMobile");
-    input.addEventListener("keypress", function (event) {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        document.getElementById("guessButtonMobile").click();
-      }
-    });
+    document
+      .getElementById("guessInputMobile")
+      .addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          document.getElementById("guessButtonMobile").click();
+        }
+      });
   }
 
   function giveHint() {
@@ -644,8 +645,25 @@ function MobileApp() {
   }
 
   function makeGuess() {
-    var scale = "scale(1)";
-    document.body.style.webkitTransform = scale;
+    console.log("hi");
+    function iOS() {
+      return (
+        [
+          "iPad Simulator",
+          "iPhone Simulator",
+          "iPod Simulator",
+          "iPad",
+          "iPhone",
+          "iPod",
+        ].includes(navigator.platform) ||
+        // iPad on iOS 13 detection
+        (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+      );
+    }
+    if (iOS()) {
+      var scale = "scale(1)";
+      document.body.style.webkitTransform = scale;
+    }
     let compArray = undefined;
     switch (gameOption) {
       case "Top Artists":
