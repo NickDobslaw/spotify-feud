@@ -769,8 +769,8 @@ function WebApp() {
         if (count === arr.length)
           setTimeout(() => {
             playWin();
-          }, 1200 + delay);
-        delay += 2000;
+          }, 1500 + delay);
+        delay += 1500;
       }
     }
   }
