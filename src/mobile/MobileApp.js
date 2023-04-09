@@ -16,8 +16,8 @@ import {faToggleOn, faToggleOff} from "@fortawesome/free-solid-svg-icons";
 function MobileApp() {
   const clientId = "8c307a26103a46938a902a46e8ac59a8";
   const clientSecret = "eaf9ea34a9d941f39c4f825442b4b821";
-  //const redirectUri = "https://NickDobslaw.github.io/spotify-feud";
-  const redirectUri = "http://localhost:3000";
+  const redirectUri = "https://NickDobslaw.github.io/spotify-feud";
+  //const redirectUri = "http://localhost:3000";
 
   const [playRight] = useSound(rightSound, {volume: 0.25});
   const [playWrong] = useSound(wrongSound, {volume: 0.5});
