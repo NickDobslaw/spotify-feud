@@ -578,14 +578,21 @@ function MobileApp() {
     document.getElementById("gameBoardMobile").style.display = "block";
     document.getElementById("gameOptionsMobile").style.display = "none";
     document.getElementById("nonMusicGameOptionsMobile").style.display = "none";
-    document
-      .getElementById("guessInputMobile")
-      .addEventListener("keypress", function (event) {
-        if (event.key === "Enter") {
-          event.preventDefault();
-          document.getElementById("guessButtonMobile").click();
-        }
-      });
+    const input = document.getElementByID("guessInputMobile");
+    input.addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById("guessButtonMobile").click();
+      }
+    });
+    function handleFocus() {
+      input.style.fontSize = "16px";
+    }
+    function handleBlur() {
+      input.style.fontSize = "";
+    }
+    input.addEventListener("touchstart", handleFocus);
+    input.addEventListener("blur", handleBlur);
   }
 
   function giveHint() {
