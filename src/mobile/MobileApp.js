@@ -645,6 +645,9 @@ function MobileApp() {
   }
 
   function makeGuess() {
+    document
+      .getElementById("gameBoardMobile")
+      .scrollIntoView({behavior: "smooth"});
     let compArray = undefined;
     switch (gameOption) {
       case "Top Artists":
