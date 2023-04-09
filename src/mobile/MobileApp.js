@@ -585,14 +585,6 @@ function MobileApp() {
         document.getElementById("guessButtonMobile").click();
       }
     });
-    function handleFocus() {
-      input.style.fontSize = "16px";
-    }
-    function handleBlur() {
-      input.style.fontSize = "";
-    }
-    input.addEventListener("touchstart", handleFocus);
-    input.addEventListener("blur", handleBlur);
   }
 
   function giveHint() {
@@ -652,6 +644,9 @@ function MobileApp() {
   }
 
   function makeGuess() {
+    document.body.style.zoom = 1.0;
+    var scale = "scale(1)";
+    document.body.style.webkitTransform = scale;
     let compArray = undefined;
     switch (gameOption) {
       case "Top Artists":
