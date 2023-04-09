@@ -644,7 +644,6 @@ function MobileApp() {
   }
 
   function makeGuess() {
-    document.body.style.zoom = 1.0;
     var scale = "scale(1)";
     document.body.style.webkitTransform = scale;
     let compArray = undefined;
