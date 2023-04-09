@@ -252,7 +252,10 @@ function MobileApp() {
   }
 
   async function getArtistAlbums(id) {
-    return await fetchWebApi(`v1/artists/${id}/albums?limit=50`, "GET");
+    return await fetchWebApi(
+      `v1/artists/${id}/albums?limit=50&include_groups=album,single`,
+      "GET"
+    );
   }
 
   async function logArtistAlbums(artist) {
@@ -260,7 +263,7 @@ function MobileApp() {
     console.log(albumData);
     if (albumData.items.length > 0) {
       let tempData = albumData.items.filter((album) => {
-        return album.album_group === "album";
+        return album.total_tracks > 4 || album.album_group === "album";
       });
       tempData.forEach((data) => {
         if (data.name.includes("("))
