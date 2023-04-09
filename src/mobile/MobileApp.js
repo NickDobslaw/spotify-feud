@@ -645,25 +645,6 @@ function MobileApp() {
   }
 
   function makeGuess() {
-    console.log("hi");
-    function iOS() {
-      return (
-        [
-          "iPad Simulator",
-          "iPhone Simulator",
-          "iPod Simulator",
-          "iPad",
-          "iPhone",
-          "iPod",
-        ].includes(navigator.platform) ||
-        // iPad on iOS 13 detection
-        (navigator.userAgent.includes("Mac") && "ontouchend" in document)
-      );
-    }
-    if (iOS()) {
-      var scale = "scale(1)";
-      document.body.style.webkitTransform = scale;
-    }
     let compArray = undefined;
     switch (gameOption) {
       case "Top Artists":
@@ -789,498 +770,512 @@ function MobileApp() {
   }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img alt="" className="blueLogo" id="blueLogo" src={blueLogo} />
-        <img
-          alt=""
-          className="textLogoMobile"
-          id="textLogoMobile"
-          src={textLogo}
-        ></img>
-        {!token ? (
-          <>
-            <button
-              className="loginButton"
-              id="loginButton"
-              onClick={authorize}
-            >
-              Log In with Spotify
-            </button>
-          </>
-        ) : (
-          <>
-            <a
-              class="active"
-              onClick={() => {
-                toggleMute(!mute);
-                if (volumeIcon === faVolumeHigh) setVolumeIcon(faVolumeXmark);
-                else setVolumeIcon(faVolumeHigh);
-              }}
-              style={{cursor: "pointer"}}
-            >
-              <FontAwesomeIcon
-                style={{display: "inline-block", marginLeft: "20px"}}
-                className="volumeIcon"
-                id="volumeIcon"
-                size="xl"
-                color="white"
-                icon={volumeIcon}
-              />
-            </a>
-            <a
-              className="noFailIcon"
-              onClick={() => {
-                setNoFailMode(!noFailMode);
-                if (noFailIcon === faToggleOff) setNoFailIcon(faToggleOn);
-                else setNoFailIcon(faToggleOff);
-              }}
-              style={{cursor: "pointer"}}
-            >
-              <FontAwesomeIcon
-                style={{display: "inline-block", marginLeft: "20px"}}
-                className="noFail"
-                id="xIcon"
-                size="xl"
-                color="white"
-                icon={noFailIcon}
-              />
-              <h4 style={{display: "inline-block", marginLeft: "10px"}}>
-                {noFailMode ? "No Fail Mode ON" : "No Fail Mode OFF"}
-              </h4>
-            </a>
-            <img
-              alt=""
-              style={{marginTop: "50px"}}
-              className="textLogo"
-              src={textLogo}
-            ></img>
-            <div id="gameTypeOptionsMobile" className="gameOptionsMobile">
+    <>
+      <head>
+        <meta
+          name="viewport"
+          content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"
+        />
+      </head>
+      <div className="App">
+        <header className="App-header">
+          <img alt="" className="blueLogo" id="blueLogo" src={blueLogo} />
+          <img
+            alt=""
+            className="textLogoMobile"
+            id="textLogoMobile"
+            src={textLogo}
+          ></img>
+          {!token ? (
+            <>
               <button
+                className="loginButton"
+                id="loginButton"
+                onClick={authorize}
+              >
+                Log In with Spotify
+              </button>
+            </>
+          ) : (
+            <>
+              <a
+                class="active"
                 onClick={() => {
-                  document.getElementById(
-                    "gameTypeOptionsMobile"
-                  ).style.display = "none";
-                  document.getElementById("gameOptionsMobile").style.display =
-                    "block";
+                  toggleMute(!mute);
+                  if (volumeIcon === faVolumeHigh) setVolumeIcon(faVolumeXmark);
+                  else setVolumeIcon(faVolumeHigh);
                 }}
+                style={{cursor: "pointer"}}
               >
-                Music-Related
-              </button>
-              <button
+                <FontAwesomeIcon
+                  style={{display: "inline-block", marginLeft: "20px"}}
+                  className="volumeIcon"
+                  id="volumeIcon"
+                  size="xl"
+                  color="white"
+                  icon={volumeIcon}
+                />
+              </a>
+              <a
+                className="noFailIcon"
                 onClick={() => {
-                  document.getElementById(
-                    "gameTypeOptionsMobile"
-                  ).style.display = "none";
-                  document.getElementById(
-                    "nonMusicGameOptionsMobile"
-                  ).style.display = "block";
+                  setNoFailMode(!noFailMode);
+                  if (noFailIcon === faToggleOff) setNoFailIcon(faToggleOn);
+                  else setNoFailIcon(faToggleOff);
                 }}
+                style={{cursor: "pointer"}}
               >
-                Not Music-Related
-              </button>
-            </div>
-            <div
-              id="nonMusicGameOptionsMobile"
-              style={{display: "none"}}
-              className="gameOptionsMobile"
-            >
-              <button
-                onClick={() => {
-                  setGameOption("Dog Breeds");
-                  assignNonMusic("Dog Breeds");
-                  displayGameBoard();
-                }}
-              >
-                Dog Breeds
-              </button>
-              <button
-                onClick={() => {
-                  setGameOption("Fast Food");
-                  assignNonMusic("Fast Food");
-                  displayGameBoard();
-                }}
-              >
-                Fast Food
-              </button>
-              <button
-                onClick={() => {
-                  setGameOption("Pixar Films");
-                  assignNonMusic("Pixar Films");
-                  displayGameBoard();
-                }}
-              >
-                Pixar Films
-              </button>
-              <button
-                onClick={() => {
-                  setGameOption("Disney Channel Shows");
-                  assignNonMusic("Disney Channel Shows");
-                  displayGameBoard();
-                }}
-              >
-                Disney Channel Shows
-              </button>
-              <button
-                onClick={() => {
-                  setGameOption("Cartoon Network Shows");
-                  assignNonMusic("Cartoon Network Shows");
-                  displayGameBoard();
-                }}
-              >
-                Cartoon Network Shows
-              </button>
-              <button
-                onClick={() => {
-                  setGameOption("Nickelodeon Shows");
-                  assignNonMusic("Nickelodeon Shows");
-                  displayGameBoard();
-                }}
-              >
-                Nickelodeon Shows
-              </button>
-              <button
-                onClick={() => {
-                  setGameOption("Top Scorers 22/23");
-                  assignNonMusic("Top Scorers 22/23");
-                  displayGameBoard();
-                }}
-              >
-                Top Scorers 22/23
-              </button>
-              <button
-                onClick={() => {
-                  setGameOption("Receiving Yards 22/23");
-                  assignNonMusic("Receiving Yards 22/23");
-                  displayGameBoard();
-                }}
-              >
-                Receiving Yards 22/23
-              </button>
-              <button
-                onClick={() => {
-                  setGameOption("Receiving Yards All Time");
-                  assignNonMusic("Receiving Yards All Time");
-                  displayGameBoard();
-                }}
-              >
-                Receiving Yards All Time
-              </button>
-              <button
-                onClick={() => {
-                  setGameOption("Video Games");
-                  assignNonMusic("Video Games");
-                  displayGameBoard();
-                }}
-              >
-                Video Games
-              </button>
-            </div>
-            <div
-              id="gameOptionsMobile"
-              style={{display: "none"}}
-              className="gameOptionsMobile"
-            >
-              <button
-                onClick={() => {
-                  setGameOption("Top Tracks");
-                  assignTopTracks();
-                  displayGameBoard();
-                }}
-              >
-                Top Tracks
-              </button>
-              <button
-                onClick={() => {
-                  setGameOption("Top Artists");
-                  assignTopArtists();
-                  displayGameBoard();
-                }}
-              >
-                Top Artists
-              </button>
-              <button
-                onClick={() => {
-                  document.getElementById("gameOptionsMobile").style.display =
-                    "none";
-                  document.getElementById("artistSearchMobile").style.display =
-                    "block";
-                  document
-                    .getElementById("searchInputMobile")
-                    .addEventListener("keypress", function (event) {
-                      if (event.key === "Enter") {
-                        event.preventDefault();
-                        document.getElementById("searchButtonMobile").click();
-                      }
-                    });
-                  setGameOption("Artists Top Tracks");
-                }}
-              >
-                Artist's Top Tracks
-              </button>
-              <button
-                onClick={() => {
-                  document.getElementById("gameOptionsMobile").style.display =
-                    "none";
-                  document.getElementById("artistSearchMobile").style.display =
-                    "block";
-                  document
-                    .getElementById("searchInputMobile")
-                    .addEventListener("keypress", function (event) {
-                      if (event.key === "Enter") {
-                        event.preventDefault();
-                        document.getElementById("searchButtonMobile").click();
-                      }
-                    });
-                  setGameOption("Related");
-                }}
-              >
-                Related Artists
-              </button>
-              <button
-                onClick={() => {
-                  document.getElementById("gameOptionsMobile").style.display =
-                    "none";
-                  document.getElementById("artistSearchMobile").style.display =
-                    "block";
-                  document
-                    .getElementById("searchInputMobile")
-                    .addEventListener("keypress", function (event) {
-                      if (event.key === "Enter") {
-                        event.preventDefault();
-                        document.getElementById("searchButtonMobile").click();
-                      }
-                    });
-                  setGameOption("Album's Top Songs");
-                }}
-              >
-                Album's Top Songs
-              </button>
-            </div>
-            <div
-              className="artistSearchMobile"
-              id="artistSearchMobile"
-              style={{display: "none"}}
-            >
-              <h2 style={{fontSize: "20px"}}>
-                {albumMode ? "Choose an Album" : "Artist Search"}
-              </h2>
-              <input
-                autoComplete="off"
-                onChange={(e) => {
-                  setSearchKey(e.target.value);
-                }}
-                style={{marginTop: "30px"}}
-                type="text"
-                className="searchInputMobile"
-                id="searchInputMobile"
-                value={searchKey}
-              ></input>
-              <button
-                id="searchButtonMobile"
-                className="guessButtonMobile"
-                onClick={logArtistData}
-              >
-                Search
-              </button>
-              <div>
-                {artistData.map((artist, index) => {
-                  return (
-                    <>
-                      <a
-                        class="active"
-                        style={{cursor: "pointer"}}
-                        onClick={() => {
-                          setSelectedArtist(artist.name);
-                          if (gameOption === "Artists Top Tracks")
-                            logArtistTopTracks(artist);
-                          if (gameOption === "Related") logRelated(artist);
-                          if (gameOption === "Album's Top Songs") {
-                            if (albumMode) {
-                              logAlbumTopTracks(artist);
-                            } else logArtistAlbums(artist);
-                          }
-                        }}
-                      >
-                        <div
-                          className="artistBlockMobile"
-                          style={{display: "inline-block"}}
-                        >
-                          {artist.images.length > 0 ? (
-                            <div className="artistImgWrapper">
-                              <img
-                                style={{display: "inline-block"}}
-                                alt=""
-                                src={artist.images[0].url}
-                              />
-                            </div>
-                          ) : (
-                            ""
-                          )}
-                          <h4 style={{display: "inline-block"}}>
-                            {artist.name.length > 14
-                              ? artist.name.slice(0, 13) + "..."
-                              : artist.name}
-                          </h4>
-                        </div>
-                      </a>
-                    </>
-                  );
-                })}
-              </div>
-            </div>
-            <div id="gameBoardMobile" className="gameBoardMobile">
-              <h2 style={{fontSize: "27px"}}>
-                {selectedAlbum
-                  ? selectedAlbum.name + "'s Top Tracks"
-                  : gameTitle
-                  ? gameTitle
-                  : gameOption}
-              </h2>
-              <div className="board">
-                <div style={{display: "inline-block"}} className="column1">
-                  {answers.length > 0 ? (
-                    <>
-                      <div id="listItem1Mobile" className="listItem1Mobile">
-                        <div className="oval">1</div>
-                      </div>
-                      <div id="correct1Mobile" className="correct1Mobile">
-                        <h2>{answers[0]}</h2>
-                      </div>
-                    </>
-                  ) : (
-                    <div id="listItem1Mobile" className="listItem1Mobile"></div>
-                  )}
-                  {answers.length > 1 ? (
-                    <>
-                      <div id="listItem2Mobile" className="listItem2Mobile">
-                        <div className="oval">2</div>
-                      </div>
-                      <div id="correct2Mobile" className="correct2Mobile">
-                        <h2>{answers[1]}</h2>
-                      </div>
-                    </>
-                  ) : (
-                    <div id="listItem2Mobile" className="listItem2Mobile" />
-                  )}
-                  {answers.length > 2 ? (
-                    <>
-                      <div id="listItem3Mobile" className="listItem3Mobile">
-                        <div className="oval">3</div>
-                      </div>
-                      <div id="correct3Mobile" className="correct3Mobile">
-                        <h2>{answers[2]}</h2>
-                      </div>
-                    </>
-                  ) : (
-                    <div id="listItem3Mobile" className="listItem3Mobile" />
-                  )}
-                  {answers.length > 3 ? (
-                    <>
-                      <div id="listItem4Mobile" className="listItem4Mobile">
-                        <div className="oval">4</div>
-                      </div>
-                      <div id="correct4Mobile" className="correct4Mobile">
-                        <h2> {answers[3]}</h2>
-                      </div>
-                    </>
-                  ) : (
-                    <div id="listItem4Mobile" className="listItem4Mobile" />
-                  )}
-                </div>
-                <div style={{display: "inline-block"}} className="column2">
-                  {answers.length > 4 ? (
-                    <>
-                      <div id="listItem5Mobile" className="listItem5Mobile">
-                        <div className="oval">5</div>
-                      </div>
-                      <div id="correct5Mobile" className="correct5Mobile">
-                        <h2>{answers[4]}</h2>
-                      </div>
-                    </>
-                  ) : (
-                    <div id="listItem5Mobile" className="listItem5Mobile" />
-                  )}
-                  {answers.length > 5 ? (
-                    <>
-                      <div id="listItem6Mobile" className="listItem6Mobile">
-                        <div className="oval">6</div>
-                      </div>
-                      <div id="correct6Mobile" className="correct6Mobile">
-                        <h2>{answers[5]}</h2>
-                      </div>
-                    </>
-                  ) : (
-                    <div id="listItem6Mobile" className="listItem6Mobile" />
-                  )}
-                  {answers.length > 6 ? (
-                    <>
-                      <div id="listItem7Mobile" className="listItem7Mobile">
-                        <div className="oval">7</div>
-                      </div>
-                      <div id="correct7Mobile" className="correct7Mobile">
-                        <h2>{answers[6]}</h2>
-                      </div>
-                    </>
-                  ) : (
-                    <div id="listItem7Mobile" className="listItem7Mobile" />
-                  )}
-                  {answers.length > 7 ? (
-                    <>
-                      <div id="listItem8Mobile" className="listItem8Mobile">
-                        <div className="oval">8</div>
-                      </div>
-                      <div id="correct8Mobile" className="correct8Mobile">
-                        <h2>{answers[7]}</h2>
-                      </div>
-                    </>
-                  ) : (
-                    <div id="listItem8Mobile" className="listItem8Mobile" />
-                  )}
-                </div>
-              </div>
-              <br />
-              <div>
+                <FontAwesomeIcon
+                  style={{display: "inline-block", marginLeft: "20px"}}
+                  className="noFail"
+                  id="xIcon"
+                  size="xl"
+                  color="white"
+                  icon={noFailIcon}
+                />
+                <h4 style={{display: "inline-block", marginLeft: "10px"}}>
+                  {noFailMode ? "No Fail Mode ON" : "No Fail Mode OFF"}
+                </h4>
+              </a>
+              <img
+                alt=""
+                style={{marginTop: "50px"}}
+                className="textLogo"
+                src={textLogo}
+              ></img>
+              <div id="gameTypeOptionsMobile" className="gameOptionsMobile">
                 <button
-                  id="hintButton"
-                  className="guessButtonMobile"
-                  onClick={giveHint}
+                  onClick={() => {
+                    document.getElementById(
+                      "gameTypeOptionsMobile"
+                    ).style.display = "none";
+                    document.getElementById("gameOptionsMobile").style.display =
+                      "block";
+                  }}
                 >
-                  Hint
+                  Music-Related
                 </button>
+                <button
+                  onClick={() => {
+                    document.getElementById(
+                      "gameTypeOptionsMobile"
+                    ).style.display = "none";
+                    document.getElementById(
+                      "nonMusicGameOptionsMobile"
+                    ).style.display = "block";
+                  }}
+                >
+                  Not Music-Related
+                </button>
+              </div>
+              <div
+                id="nonMusicGameOptionsMobile"
+                style={{display: "none"}}
+                className="gameOptionsMobile"
+              >
+                <button
+                  onClick={() => {
+                    setGameOption("Dog Breeds");
+                    assignNonMusic("Dog Breeds");
+                    displayGameBoard();
+                  }}
+                >
+                  Dog Breeds
+                </button>
+                <button
+                  onClick={() => {
+                    setGameOption("Fast Food");
+                    assignNonMusic("Fast Food");
+                    displayGameBoard();
+                  }}
+                >
+                  Fast Food
+                </button>
+                <button
+                  onClick={() => {
+                    setGameOption("Pixar Films");
+                    assignNonMusic("Pixar Films");
+                    displayGameBoard();
+                  }}
+                >
+                  Pixar Films
+                </button>
+                <button
+                  onClick={() => {
+                    setGameOption("Disney Channel Shows");
+                    assignNonMusic("Disney Channel Shows");
+                    displayGameBoard();
+                  }}
+                >
+                  Disney Channel Shows
+                </button>
+                <button
+                  onClick={() => {
+                    setGameOption("Cartoon Network Shows");
+                    assignNonMusic("Cartoon Network Shows");
+                    displayGameBoard();
+                  }}
+                >
+                  Cartoon Network Shows
+                </button>
+                <button
+                  onClick={() => {
+                    setGameOption("Nickelodeon Shows");
+                    assignNonMusic("Nickelodeon Shows");
+                    displayGameBoard();
+                  }}
+                >
+                  Nickelodeon Shows
+                </button>
+                <button
+                  onClick={() => {
+                    setGameOption("Top Scorers 22/23");
+                    assignNonMusic("Top Scorers 22/23");
+                    displayGameBoard();
+                  }}
+                >
+                  Top Scorers 22/23
+                </button>
+                <button
+                  onClick={() => {
+                    setGameOption("Receiving Yards 22/23");
+                    assignNonMusic("Receiving Yards 22/23");
+                    displayGameBoard();
+                  }}
+                >
+                  Receiving Yards 22/23
+                </button>
+                <button
+                  onClick={() => {
+                    setGameOption("Receiving Yards All Time");
+                    assignNonMusic("Receiving Yards All Time");
+                    displayGameBoard();
+                  }}
+                >
+                  Receiving Yards All Time
+                </button>
+                <button
+                  onClick={() => {
+                    setGameOption("Video Games");
+                    assignNonMusic("Video Games");
+                    displayGameBoard();
+                  }}
+                >
+                  Video Games
+                </button>
+              </div>
+              <div
+                id="gameOptionsMobile"
+                style={{display: "none"}}
+                className="gameOptionsMobile"
+              >
+                <button
+                  onClick={() => {
+                    setGameOption("Top Tracks");
+                    assignTopTracks();
+                    displayGameBoard();
+                  }}
+                >
+                  Top Tracks
+                </button>
+                <button
+                  onClick={() => {
+                    setGameOption("Top Artists");
+                    assignTopArtists();
+                    displayGameBoard();
+                  }}
+                >
+                  Top Artists
+                </button>
+                <button
+                  onClick={() => {
+                    document.getElementById("gameOptionsMobile").style.display =
+                      "none";
+                    document.getElementById(
+                      "artistSearchMobile"
+                    ).style.display = "block";
+                    document
+                      .getElementById("searchInputMobile")
+                      .addEventListener("keypress", function (event) {
+                        if (event.key === "Enter") {
+                          event.preventDefault();
+                          document.getElementById("searchButtonMobile").click();
+                        }
+                      });
+                    setGameOption("Artists Top Tracks");
+                  }}
+                >
+                  Artist's Top Tracks
+                </button>
+                <button
+                  onClick={() => {
+                    document.getElementById("gameOptionsMobile").style.display =
+                      "none";
+                    document.getElementById(
+                      "artistSearchMobile"
+                    ).style.display = "block";
+                    document
+                      .getElementById("searchInputMobile")
+                      .addEventListener("keypress", function (event) {
+                        if (event.key === "Enter") {
+                          event.preventDefault();
+                          document.getElementById("searchButtonMobile").click();
+                        }
+                      });
+                    setGameOption("Related");
+                  }}
+                >
+                  Related Artists
+                </button>
+                <button
+                  onClick={() => {
+                    document.getElementById("gameOptionsMobile").style.display =
+                      "none";
+                    document.getElementById(
+                      "artistSearchMobile"
+                    ).style.display = "block";
+                    document
+                      .getElementById("searchInputMobile")
+                      .addEventListener("keypress", function (event) {
+                        if (event.key === "Enter") {
+                          event.preventDefault();
+                          document.getElementById("searchButtonMobile").click();
+                        }
+                      });
+                    setGameOption("Album's Top Songs");
+                  }}
+                >
+                  Album's Top Songs
+                </button>
+              </div>
+              <div
+                className="artistSearchMobile"
+                id="artistSearchMobile"
+                style={{display: "none"}}
+              >
+                <h2 style={{fontSize: "20px"}}>
+                  {albumMode ? "Choose an Album" : "Artist Search"}
+                </h2>
                 <input
                   autoComplete="off"
                   onChange={(e) => {
-                    setGuessText(e.target.value);
+                    setSearchKey(e.target.value);
                   }}
+                  style={{marginTop: "30px"}}
                   type="text"
-                  className="guessInputMobile"
-                  id="guessInputMobile"
-                  name="guess"
-                  value={guessText}
+                  className="searchInputMobile"
+                  id="searchInputMobile"
+                  value={searchKey}
                 ></input>
                 <button
-                  id="guessButtonMobile"
+                  id="searchButtonMobile"
                   className="guessButtonMobile"
-                  onClick={makeGuess}
+                  onClick={logArtistData}
                 >
-                  Guess
+                  Search
+                </button>
+                <div>
+                  {artistData.map((artist, index) => {
+                    return (
+                      <>
+                        <a
+                          class="active"
+                          style={{cursor: "pointer"}}
+                          onClick={() => {
+                            setSelectedArtist(artist.name);
+                            if (gameOption === "Artists Top Tracks")
+                              logArtistTopTracks(artist);
+                            if (gameOption === "Related") logRelated(artist);
+                            if (gameOption === "Album's Top Songs") {
+                              if (albumMode) {
+                                logAlbumTopTracks(artist);
+                              } else logArtistAlbums(artist);
+                            }
+                          }}
+                        >
+                          <div
+                            className="artistBlockMobile"
+                            style={{display: "inline-block"}}
+                          >
+                            {artist.images.length > 0 ? (
+                              <div className="artistImgWrapper">
+                                <img
+                                  style={{display: "inline-block"}}
+                                  alt=""
+                                  src={artist.images[0].url}
+                                />
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                            <h4 style={{display: "inline-block"}}>
+                              {artist.name.length > 14
+                                ? artist.name.slice(0, 13) + "..."
+                                : artist.name}
+                            </h4>
+                          </div>
+                        </a>
+                      </>
+                    );
+                  })}
+                </div>
+              </div>
+              <div id="gameBoardMobile" className="gameBoardMobile">
+                <h2 style={{fontSize: "27px"}}>
+                  {selectedAlbum
+                    ? selectedAlbum.name + "'s Top Tracks"
+                    : gameTitle
+                    ? gameTitle
+                    : gameOption}
+                </h2>
+                <div className="board">
+                  <div style={{display: "inline-block"}} className="column1">
+                    {answers.length > 0 ? (
+                      <>
+                        <div id="listItem1Mobile" className="listItem1Mobile">
+                          <div className="oval">1</div>
+                        </div>
+                        <div id="correct1Mobile" className="correct1Mobile">
+                          <h2>{answers[0]}</h2>
+                        </div>
+                      </>
+                    ) : (
+                      <div
+                        id="listItem1Mobile"
+                        className="listItem1Mobile"
+                      ></div>
+                    )}
+                    {answers.length > 1 ? (
+                      <>
+                        <div id="listItem2Mobile" className="listItem2Mobile">
+                          <div className="oval">2</div>
+                        </div>
+                        <div id="correct2Mobile" className="correct2Mobile">
+                          <h2>{answers[1]}</h2>
+                        </div>
+                      </>
+                    ) : (
+                      <div id="listItem2Mobile" className="listItem2Mobile" />
+                    )}
+                    {answers.length > 2 ? (
+                      <>
+                        <div id="listItem3Mobile" className="listItem3Mobile">
+                          <div className="oval">3</div>
+                        </div>
+                        <div id="correct3Mobile" className="correct3Mobile">
+                          <h2>{answers[2]}</h2>
+                        </div>
+                      </>
+                    ) : (
+                      <div id="listItem3Mobile" className="listItem3Mobile" />
+                    )}
+                    {answers.length > 3 ? (
+                      <>
+                        <div id="listItem4Mobile" className="listItem4Mobile">
+                          <div className="oval">4</div>
+                        </div>
+                        <div id="correct4Mobile" className="correct4Mobile">
+                          <h2> {answers[3]}</h2>
+                        </div>
+                      </>
+                    ) : (
+                      <div id="listItem4Mobile" className="listItem4Mobile" />
+                    )}
+                  </div>
+                  <div style={{display: "inline-block"}} className="column2">
+                    {answers.length > 4 ? (
+                      <>
+                        <div id="listItem5Mobile" className="listItem5Mobile">
+                          <div className="oval">5</div>
+                        </div>
+                        <div id="correct5Mobile" className="correct5Mobile">
+                          <h2>{answers[4]}</h2>
+                        </div>
+                      </>
+                    ) : (
+                      <div id="listItem5Mobile" className="listItem5Mobile" />
+                    )}
+                    {answers.length > 5 ? (
+                      <>
+                        <div id="listItem6Mobile" className="listItem6Mobile">
+                          <div className="oval">6</div>
+                        </div>
+                        <div id="correct6Mobile" className="correct6Mobile">
+                          <h2>{answers[5]}</h2>
+                        </div>
+                      </>
+                    ) : (
+                      <div id="listItem6Mobile" className="listItem6Mobile" />
+                    )}
+                    {answers.length > 6 ? (
+                      <>
+                        <div id="listItem7Mobile" className="listItem7Mobile">
+                          <div className="oval">7</div>
+                        </div>
+                        <div id="correct7Mobile" className="correct7Mobile">
+                          <h2>{answers[6]}</h2>
+                        </div>
+                      </>
+                    ) : (
+                      <div id="listItem7Mobile" className="listItem7Mobile" />
+                    )}
+                    {answers.length > 7 ? (
+                      <>
+                        <div id="listItem8Mobile" className="listItem8Mobile">
+                          <div className="oval">8</div>
+                        </div>
+                        <div id="correct8Mobile" className="correct8Mobile">
+                          <h2>{answers[7]}</h2>
+                        </div>
+                      </>
+                    ) : (
+                      <div id="listItem8Mobile" className="listItem8Mobile" />
+                    )}
+                  </div>
+                </div>
+                <br />
+                <div>
+                  <button
+                    id="hintButton"
+                    className="guessButtonMobile"
+                    onClick={giveHint}
+                  >
+                    Hint
+                  </button>
+                  <input
+                    autoComplete="off"
+                    onChange={(e) => {
+                      setGuessText(e.target.value);
+                    }}
+                    type="text"
+                    className="guessInputMobile"
+                    id="guessInputMobile"
+                    name="guess"
+                    value={guessText}
+                  ></input>
+                  <button
+                    id="guessButtonMobile"
+                    className="guessButtonMobile"
+                    onClick={makeGuess}
+                  >
+                    Guess
+                  </button>
+                </div>
+              </div>
+              <div id="xsMobile" style={{}} className="xsMobile">
+                {xs}
+              </div>
+              <br />
+              <div>
+                <button className="logoutButton" onClick={logout}>
+                  Logout
                 </button>
               </div>
-            </div>
-            <div id="xsMobile" style={{}} className="xsMobile">
-              {xs}
-            </div>
-            <br />
-            <div>
-              <button className="logoutButton" onClick={logout}>
-                Logout
-              </button>
-            </div>
-          </>
-        )}
-      </header>
-    </div>
+            </>
+          )}
+        </header>
+      </div>
+    </>
   );
 }
 
